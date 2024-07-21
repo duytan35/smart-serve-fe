@@ -1,0 +1,23 @@
+@import "../globals.scss";
+
+.menu_container {
+    height: 87vh;
+    overflow: hidden;
+
+    .conatiner_header {
+        height: 50px;
+        background-color: $color-content-header;
+        color: $color-light;
+        padding: $space-2;
+        line-height: 32px;
+        font-weight: $font-weight-bold;
+        font-size: $title-sm-text;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+    }
+
+    .container_content {
+        width: 200%;
+        padding: $space-2;
+    }
+}

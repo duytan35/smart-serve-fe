@@ -43,3 +43,37 @@ body {
   border: 6px solid transparent;
   background-clip: content-box;
 }
+
+// global scss
+
+$backround-color : #eaedf0;
+$backround-color-common : #00B1CC;
+
+// color
+$color-default : black;
+$color-light: white;
+$color-light-opacity-05: rgb(255, 255, 255, 0.5);
+$color-content-header : #02D0F0;
+
+// font weight
+$font-weight-default : 400;
+$font-weight-bold : 700;
+
+// text size
+$title-sm-text : 16px;
+$title-md-text : 24px;
+$icon-default-size : 32px;
+
+// space
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 22px;
+$space-6: 24px;
+
+.title-md {
+  font-size: $title-md-text;
+  color: $color-default;
+  font-weight: $font-weight-bold;
+}

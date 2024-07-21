@@ -38,7 +38,7 @@ const columns = [
 
 const DashboardPage = () => {
   return (
-    <div>
+    <div className='dashboard_container'>
       This is dashboard page
       <Table dataSource={dataSource} columns={columns} />;
     </div>
