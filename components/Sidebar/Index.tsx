@@ -1,54 +1,60 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { Col, Row } from 'antd';
-import sidebarNavigate from "../../contants/sidebar"
+import { usePathname } from 'next/navigation';
+import sidebarNavigate from '../../contants/sidebar';
 
-import "./styles.scss"
-import { useRouter } from 'next/router';
+import './styles.scss';
+import Link from 'next/link';
 
 type SidebarNavItem = {
-    name: string;
-    icon: JSX.Element;
-    path: string;
+  name: string;
+  icon: React.ElementType;
+  path: string;
 };
 
 const Sidebar = () => {
+  const pathname = usePathname();
 
-    const [sidebarIndex, setSidebarIndex] = useState(0)
-    const router = useRouter();
-
-    const handleNavigation = (path: string) => {
-        router.push(path);  // Use router.push to navigate
-    };
-
-    const renderNavIcon = (item: SidebarNavItem, key: number) => {
-        return (
-            <Col
-                span={24}
-                className='nav_item'
-                onClick={() => handleNavigation(item.path)}
-                key={key}
-            >
-                {item.icon}
-            </Col>
-        );
-    };
-
-    return (
-        <div className='sidebar_container'>
-            <div className="sidebar_header">
-                <AlignJustify />
-            </div>
-            <Row gutter={[0, 12]} className='icon_container'>
-                {sidebarNavigate.map((item, key) => {
-                    return (
-                        renderNavIcon(item, key)
-                    )
-                })}
-            </Row>
-        </div>
+  const sidebarIndex = useMemo(() => {
+    const navIndex = sidebarNavigate.findIndex((item) =>
+      pathname.includes(item.path),
     );
+    return navIndex !== -1 ? navIndex : 0;
+  }, [pathname]);
+
+  const renderNavIcon = (item: SidebarNavItem, key: number) => {
+    return (
+      <Col
+        span={24}
+        key={key}
+        className={`nav_item ${sidebarIndex === key && 'focus_icon'}`}
+      >
+        <Link href={item.path}>
+          <item.icon />
+        </Link>
+      </Col>
+    );
+  };
+
+  return (
+    <div className="sidebar_container">
+      <div className="sidebar_header">
+        <AlignJustify />
+      </div>
+      <Row gutter={[0, 12]} className="icon_container">
+        <Col
+          span={24}
+          className="nav_item_background"
+          style={{ top: 54 * sidebarIndex + sidebarIndex * 12 }}
+        ></Col>
+        {sidebarNavigate.map((item, key) => {
+          return renderNavIcon(item, key);
+        })}
+      </Row>
+    </div>
+  );
 };
 
 export default Sidebar;

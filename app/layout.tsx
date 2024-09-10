@@ -1,10 +1,13 @@
+'use client';
 import type { Metadata } from 'next';
 import './globals.scss';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { Provider } from 'react-redux';
+import store from '../redux/store';
 
-export const metadata: Metadata = {
-  title: 'Smart Serve',
-};
+// export const metadata: Metadata = {
+//   title: 'Smart Serve',
+// };
 
 export default function RootLayout({
   children,
@@ -12,10 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <AntdRegistry>{children}</AntdRegistry>
-      </body>
-    </html>
+    <Provider store={store}>
+      <html lang="en">
+        <body>
+          <AntdRegistry>{children}</AntdRegistry>
+        </body>
+      </html>
+    </Provider>
   );
 }

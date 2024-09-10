@@ -1,44 +1,78 @@
-@import "../../app/globals.scss";
+@import '../../app/globals.scss';
 
 .sidebar_container {
-    position: sticky;
-    top: 0;
-    min-width: 80px;
-    height: 100vh;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    background-color: white;
-    flex-shrink: 0;
-    background-color: $backround-color-common;
+  position: sticky;
+  top: 0;
+  min-width: 80px;
+  height: 100vh;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: white;
+  flex-shrink: 0;
+  background-color: $backround-color-common;
 
-    .sidebar_header {
-        display: flex;
+  .sidebar_header {
+    display: flex;
+    width: 100%;
+    height: 70px;
+    // border-bottom: 1px solid $color-light-opacity-05;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      color: $color-light;
+      width: $icon-default-size;
+      height: $icon-default-size;
+    }
+  }
+
+  .icon_container {
+    flex-wrap: wrap;
+    width: 64px;
+    margin: 0 auto;
+    position: relative;
+    justify-content: center;
+
+    .nav_item {
+      width: 54px;
+      height: $side-bar-height;
+
+      a {
         width: 100%;
-        height: 70px;
-        // border-bottom: 1px solid $color-light-opacity-05;
+        height: 100%;
+        display: flex;
         justify-content: center;
         align-items: center;
 
         svg {
-            color: $color-light;
-            width: $icon-default-size;
-            height: $icon-default-size;
+          color: #808a94;
+          width: 50%;
+          height: 50%;
         }
+      }
+
+      &:hover {
+        background-color: rgb(255, 255, 255, 0.2);
+        border-radius: 6px;
+        transition: 0.3s;
+      }
     }
 
-    .icon_container {
-        flex-wrap: wrap;
-
-        .nav_item {
-            display: flex;
-            width: fit-content;
-            justify-content: center;
-            align-items: center;
-
-            svg {
-                color: $color-light;
-                width: 60%;
-                height: 50%;
-            }
+    .focus_icon {
+      a {
+        svg {
+          color: $color-default;
         }
+      }
     }
+
+    .nav_item_background {
+      position: absolute;
+      width: 100%;
+      height: $side-bar-height;
+      top: 0;
+      background-color: $color-light;
+      transition: 0.3s;
+      border-radius: 6px;
+    }
+  }
 }
