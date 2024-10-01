@@ -12,9 +12,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    const user = localStorage.getItem('user');
-    const token = user?.accessToken;
-
+    const token = localStorage.getItem('accesstoken');
+    // const token = user?.accessToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

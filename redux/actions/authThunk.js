@@ -6,7 +6,6 @@ export const loginThunk = createAsyncThunk(
   async ({ mail, password }) => {
     try {
       const response = await login(mail, password);
-      console.log(response);
 
       return response.data;
     } catch (error) {

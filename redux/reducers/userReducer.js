@@ -26,7 +26,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.user = action.payload;
       if (typeof window !== 'undefined') {
-        localStorage.setItem('user', action.payload?.data);
+        localStorage.setItem('accesstoken', action.payload?.data?.accessToken);
       }
     });
     builder.addCase(loginThunk.rejected, (state, action) => {

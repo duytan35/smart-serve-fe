@@ -11,6 +11,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import AddDishGroupModal from '@/components/AddDishGroupModal';
 import AddDishModal from '@/components/AddDishModal';
 
+import { getDishes } from "../../api/dishes"
+
 // interface MenuItem {
 //     id: number;
 //     createdAt: string;
@@ -456,6 +458,9 @@ const MenuList = () => {
   }, [menuList, selectMenuIndex]);
 
   const loadMenuList = async () => {
+    const response = await getDishes()
+    console.log(response);
+
     setMenuList(menuListDefault);
   };
 
