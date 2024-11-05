@@ -79,18 +79,21 @@
       scrollbar-width: none;
 
       .dish_list {
-        .dish_col {
-          border-radius: 6px;
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
-          overflow: hidden;
+        .dish_item {
+          .dish_col {
+            min-height: 15vh;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.3);
+            overflow: hidden;
 
-          .dish_detail {
-            padding: 0 12px;
+            .dish_detail {
+              padding: 8px 12px;
 
-            .dish_price {
-              color: #02d0f0;
-              font-weight: 500;
+              .dish_price {
+                color: #02d0f0;
+                font-weight: 500;
+              }
             }
           }
         }

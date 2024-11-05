@@ -11,8 +11,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import AddDishGroupModal from '@/components/AddDishGroupModal';
 import AddDishModal from '@/components/AddDishModal';
 
-import { getDishes } from "../../api/dishes"
-
+import { getDishes } from '../../api/dishes';
 // interface MenuItem {
 //     id: number;
 //     createdAt: string;
@@ -458,30 +457,38 @@ const MenuList = () => {
   }, [menuList, selectMenuIndex]);
 
   const loadMenuList = async () => {
-    const response = await getDishes()
+    const response = await getDishes();
     console.log(response);
 
     setMenuList(menuListDefault);
   };
 
-  const hanldeViewDish = (id: string) => {
-    router.push(`/menuList/dishDetail/${id}`);
+  const handleViewDishDetail = (dish: any) => {
+    router.push(`/menuList/dishDetail/${dish?.id}`);
   };
 
   const renderDish = (dish: any, index: number) => {
     return (
-      <Col span={12} key={index}>
+      <Col
+        onClick={() => {
+          handleViewDishDetail(dish);
+        }}
+        span={12}
+        className="dish_item"
+        key={index}
+      >
         <Row className="dish_col">
           <Col span={6}>
             <Image
-              width={'100%'}
+              // width={'100%'}
+              height={'100%'}
               src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
               alt="dishImage"
             />
           </Col>
           <Col className="dish_detail" span={18}>
             <Row justify={'space-between'}>
-              <Col className="title-sm">{dish.name}</Col>
+              <Col className="title-md">{dish.name}</Col>
               <Col className="dish_price">{formatPrice(dish.price)} VND</Col>
             </Row>
             <Row>{dish.description}</Row>

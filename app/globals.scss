@@ -86,6 +86,12 @@ $side-bar-height: 54px;
   font-weight: $font-weight-bold;
 }
 
+.title-md {
+  font-size: $title-md-text !important;
+  color: $color-default;
+  font-weight: $font-weight-bold;
+}
+
 // ant css
 .ant-card-head {
   background-color: $color-content-header !important;
@@ -97,7 +103,7 @@ $side-bar-height: 54px;
 //   background-color: #001529 !important;
 // }
 
-.ant-select{
+.ant-select {
   width: 100% !important;
 }
 

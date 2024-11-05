@@ -7,116 +7,123 @@ import { Content } from 'antd/es/layout/layout';
 import { calculateWaitingTime } from '@/utils/utils';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import RemoveOrderModal from '@/components/RemoveOrderModal';
+import { IOrderResponse } from '@/types/api/order';
+import { ITableResponse } from '@/types/api/table';
+import { orderStatus } from '@/contants/orderStatus';
+
+interface ITable extends ITableResponse {
+  status: string;
+}
 
 const initialTableList = [
   {
     id: 1,
-    createdAt: new Date('2024-07-06T06:46:03.138Z'),
-    updatedAt: new Date('2024-07-06T06:46:03.138Z'),
+    createdAt: '2024-07-06T06:46:03.138Z',
+    updatedAt: '2024-07-06T06:46:03.138Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 1',
     seats: 4,
   },
   {
     id: 2,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 3,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 4,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 5,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 6,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 7,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 8,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 9,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 10,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 11,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 12,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 13,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
   },
   {
     id: 14,
-    createdAt: new Date('2024-07-09T13:13:20.307Z'),
-    updatedAt: new Date('2024-07-09T13:13:20.307Z'),
+    createdAt: '2024-07-09T13:13:20.307Z',
+    updatedAt: '2024-07-09T13:13:20.307Z',
     restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
     name: 'Bàn 2',
     seats: 4,
@@ -127,9 +134,9 @@ const initialOrderList = [
   {
     id: 2,
     tableId: 1,
-    status: 1,
-    createdAt: new Date('2024-07-30T06:51:04.473Z'),
-    updatedAt: new Date('2024-07-30T06:51:42.54Z'),
+    status: 'InProgress',
+    createdAt: '2024-07-30T06:51:04.473Z',
+    updatedAt: '2024-07-30T06:51:42.54Z',
     orderDetails: [
       {
         id: 3,
@@ -138,17 +145,17 @@ const initialOrderList = [
         dishId: 1,
         dishName: 'Phở',
         dishPrice: 50000,
-        createdAt: new Date('2024-07-06T06:51:42.547Z'),
-        updatedAt: new Date('2024-07-06T06:51:42.547Z'),
+        createdAt: '2024-07-06T06:51:42.547Z',
+        updatedAt: '2024-07-06T06:51:42.547Z',
       },
     ],
   },
   {
     id: 3,
     tableId: 2,
-    status: 1,
-    createdAt: new Date('2024-07-07T10:15:30.473Z'),
-    updatedAt: new Date('2024-07-07T10:45:42.54Z'),
+    status: 'Complete',
+    createdAt: '2024-07-07T10:15:30.473Z',
+    updatedAt: '2024-07-07T10:45:42.54Z',
     orderDetails: [
       {
         id: 4,
@@ -157,8 +164,8 @@ const initialOrderList = [
         dishId: 2,
         dishName: 'Bún Bò Huế',
         dishPrice: 60000,
-        createdAt: new Date('2024-07-07T10:45:42.547Z'),
-        updatedAt: new Date('2024-07-07T10:45:42.547Z'),
+        createdAt: '2024-07-07T10:45:42.547Z',
+        updatedAt: '2024-07-07T10:45:42.547Z',
       },
       {
         id: 5,
@@ -167,17 +174,17 @@ const initialOrderList = [
         dishId: 3,
         dishName: 'Chả Giò',
         dishPrice: 15000,
-        createdAt: new Date('2024-07-07T10:45:42.547Z'),
-        updatedAt: new Date('2024-07-07T10:45:42.547Z'),
+        createdAt: '2024-07-07T10:45:42.547Z',
+        updatedAt: '2024-07-07T10:45:42.547Z',
       },
     ],
   },
   {
     id: 4,
     tableId: 3,
-    status: 2,
-    createdAt: new Date('2024-07-08T12:30:15.473Z'),
-    updatedAt: new Date('2024-07-08T13:00:42.54Z'),
+    status: 'Cancel',
+    createdAt: '2024-07-08T12:30:15.473Z',
+    updatedAt: '2024-07-08T13:00:42.54Z',
     orderDetails: [
       {
         id: 6,
@@ -186,17 +193,17 @@ const initialOrderList = [
         dishId: 4,
         dishName: 'Gỏi Cuốn',
         dishPrice: 20000,
-        createdAt: new Date('2024-07-08T13:00:42.547Z'),
-        updatedAt: new Date('2024-07-08T13:00:42.547Z'),
+        createdAt: '2024-07-08T13:00:42.547Z',
+        updatedAt: '2024-07-08T13:00:42.547Z',
       },
     ],
   },
   {
     id: 5,
     tableId: 1,
-    status: 1,
-    createdAt: new Date('2024-07-09T14:15:25.473Z'),
-    updatedAt: new Date('2024-07-09T14:45:42.54Z'),
+    status: 'InProgress',
+    createdAt: '2024-07-09T14:15:25.473Z',
+    updatedAt: '2024-07-09T14:45:42.54Z',
     orderDetails: [
       {
         id: 7,
@@ -205,8 +212,8 @@ const initialOrderList = [
         dishId: 1,
         dishName: 'Phở',
         dishPrice: 50000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
+        createdAt: '2024-07-09T14:45:42.547Z',
+        updatedAt: '2024-07-09T14:45:42.547Z',
       },
       {
         id: 8,
@@ -215,8 +222,8 @@ const initialOrderList = [
         dishId: 5,
         dishName: 'Bánh Mì',
         dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
+        createdAt: '2024-07-09T14:45:42.547Z',
+        updatedAt: '2024-07-09T14:45:42.547Z',
       },
       {
         id: 9,
@@ -225,183 +232,14 @@ const initialOrderList = [
         dishId: 5,
         dishName: 'Bánh Mì',
         dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 10,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 11,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 12,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 13,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 14,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 15,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 16,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 17,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 18,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 19,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 20,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 21,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 22,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
-      },
-      {
-        id: 23,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: new Date('2024-07-09T14:45:42.547Z'),
-        updatedAt: new Date('2024-07-09T14:45:42.547Z'),
+        createdAt: '2024-07-09T14:45:42.547Z',
+        updatedAt: '2024-07-09T14:45:42.547Z',
       },
     ],
   },
 ];
 
-type orderObject = {
-  id: number;
-  tableId: number;
-  status: number;
-  createdAt: Date;
-  updatedAt: Date;
-  orderDetails: orderListObject[];
-};
-
-type orderListObject = {
-  id: number;
-  quantity: number;
-  discountPercent: number;
-  dishId: number;
-  dishName: string;
-  dishPrice: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-type tableObject = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  restaurantId: string;
-  name: string;
-  seats: number;
-};
-
-const getSortedOrderDetails = (orderList: orderObject[]) => {
+const getSortedOrderDetails = (orderList: IOrderResponse[]) => {
   return orderList.sort(
     (a: any, b: any) =>
       new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
@@ -412,13 +250,21 @@ const OrderList = () => {
   const [waitingTimes, setWaitingTimes] = useState<{ [key: number]: string }>(
     {},
   );
-  const [orderList, setOrderList] = useState<orderObject[]>(initialOrderList);
+  const [orderList, setOrderList] =
+    useState<IOrderResponse[]>(initialOrderList);
   const [visible, setVisible] = useState({ removeOrderItem: false });
   const [focusOrderDetail, setFocusOrderDetail] = useState<any>(undefined);
 
   const dynamicOrderList = useMemo(() => {
     return getSortedOrderDetails(orderList);
   }, [orderList]);
+
+  const currenTable = useMemo(() => {
+    return initialTableList.map((item) => {
+      const order = dynamicOrderList.find((e) => e.tableId === item.id);
+      return { ...item, status: order?.status ?? 'free' };
+    });
+  }, [dynamicOrderList]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -429,7 +275,7 @@ const OrderList = () => {
         );
       });
       setWaitingTimes(newWaitingTimes);
-    }, 1000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [dynamicOrderList]);
@@ -459,19 +305,29 @@ const OrderList = () => {
     });
   };
 
-  const renderTable = (table: tableObject) => {
+  const renderTable = (table: ITable) => {
+    console.log(table.status);
+
     return (
-      <Col className="table_container" key={table.id}>
-        <Row className="table_header" justify={'space-between'}>
-          <Col className="table_name">{table.name}</Col>
-          <Col className="table_status">Trống</Col>
-        </Row>
-        <Row>các món đang chờ</Row>
+      <Col span={8} key={table.id}>
+        <Col
+          className="table_container"
+          style={{
+            backgroundColor:
+              table.status === orderStatus.InProgress ? 'orange' : '#04f400',
+          }}
+        >
+          <Row className="table_header" justify={'space-between'}>
+            <Col className="table_name">{table.name}</Col>
+            <Col className="table_status">Trống</Col>
+          </Row>
+          <Row>các món đang chờ</Row>
+        </Col>
       </Col>
     );
   };
 
-  const renderOrder = (order: orderObject) => {
+  const renderOrder = (order: IOrderResponse) => {
     const table = initialTableList.find((item) => item.id === order.tableId);
     return (
       <Col className="order_container" key={order.id}>
@@ -513,8 +369,8 @@ const OrderList = () => {
       <Content className="container_content">
         <Row justify={'space-around'}>
           <Col span={16}>
-            <Row className="table_list" justify={'space-around'}>
-              {initialTableList.map((item) => renderTable(item))}
+            <Row className="table_list" gutter={[12, 8]} justify={'start'}>
+              {currenTable.map((item) => renderTable(item))}
             </Row>
           </Col>
           <Col span={8} className="order_list">

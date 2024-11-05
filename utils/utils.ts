@@ -28,9 +28,10 @@ export const calculateWaitingTime = (createdAt: string): string => {
   const diffTime = Math.abs(currentDate.getTime() - createdDate.getTime());
   const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
   const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-  const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+  // const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
 
   const padZero = (num: number) => String(num).padStart(2, '0');
 
-  return `${padZero(diffHours)}:${padZero(diffMinutes)}:${padZero(diffSeconds)}`;
+  return `${padZero(diffHours)}:${padZero(diffMinutes)}`;
+  // return `${padZero(diffHours)}:${padZero(diffMinutes)}:${padZero(diffSeconds)}`;
 };
