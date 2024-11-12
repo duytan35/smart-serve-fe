@@ -10,234 +10,11 @@ import RemoveOrderModal from '@/components/RemoveOrderModal';
 import { IOrderResponse } from '@/types/api/order';
 import { ITableResponse } from '@/types/api/table';
 import { orderStatus } from '@/contants/orderStatus';
+import { getTables } from '@/api/table';
 
 interface ITable extends ITableResponse {
   status: string;
 }
-
-const initialTableList = [
-  {
-    id: 1,
-    createdAt: '2024-07-06T06:46:03.138Z',
-    updatedAt: '2024-07-06T06:46:03.138Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 1',
-    seats: 4,
-  },
-  {
-    id: 2,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 3,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 4,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 5,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 6,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 7,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 8,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 9,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 10,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 11,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 12,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 13,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-  {
-    id: 14,
-    createdAt: '2024-07-09T13:13:20.307Z',
-    updatedAt: '2024-07-09T13:13:20.307Z',
-    restaurantId: '0e21b496-6ebc-4045-bf61-665dc990114d',
-    name: 'Bàn 2',
-    seats: 4,
-  },
-];
-
-const initialOrderList = [
-  {
-    id: 2,
-    tableId: 1,
-    status: 'InProgress',
-    createdAt: '2024-07-30T06:51:04.473Z',
-    updatedAt: '2024-07-30T06:51:42.54Z',
-    orderDetails: [
-      {
-        id: 3,
-        quantity: 2,
-        discountPercent: 0,
-        dishId: 1,
-        dishName: 'Phở',
-        dishPrice: 50000,
-        createdAt: '2024-07-06T06:51:42.547Z',
-        updatedAt: '2024-07-06T06:51:42.547Z',
-      },
-    ],
-  },
-  {
-    id: 3,
-    tableId: 2,
-    status: 'Complete',
-    createdAt: '2024-07-07T10:15:30.473Z',
-    updatedAt: '2024-07-07T10:45:42.54Z',
-    orderDetails: [
-      {
-        id: 4,
-        quantity: 1,
-        discountPercent: 10,
-        dishId: 2,
-        dishName: 'Bún Bò Huế',
-        dishPrice: 60000,
-        createdAt: '2024-07-07T10:45:42.547Z',
-        updatedAt: '2024-07-07T10:45:42.547Z',
-      },
-      {
-        id: 5,
-        quantity: 3,
-        discountPercent: 0,
-        dishId: 3,
-        dishName: 'Chả Giò',
-        dishPrice: 15000,
-        createdAt: '2024-07-07T10:45:42.547Z',
-        updatedAt: '2024-07-07T10:45:42.547Z',
-      },
-    ],
-  },
-  {
-    id: 4,
-    tableId: 3,
-    status: 'Cancel',
-    createdAt: '2024-07-08T12:30:15.473Z',
-    updatedAt: '2024-07-08T13:00:42.54Z',
-    orderDetails: [
-      {
-        id: 6,
-        quantity: 4,
-        discountPercent: 5,
-        dishId: 4,
-        dishName: 'Gỏi Cuốn',
-        dishPrice: 20000,
-        createdAt: '2024-07-08T13:00:42.547Z',
-        updatedAt: '2024-07-08T13:00:42.547Z',
-      },
-    ],
-  },
-  {
-    id: 5,
-    tableId: 1,
-    status: 'InProgress',
-    createdAt: '2024-07-09T14:15:25.473Z',
-    updatedAt: '2024-07-09T14:45:42.54Z',
-    orderDetails: [
-      {
-        id: 7,
-        quantity: 2,
-        discountPercent: 0,
-        dishId: 1,
-        dishName: 'Phở',
-        dishPrice: 50000,
-        createdAt: '2024-07-09T14:45:42.547Z',
-        updatedAt: '2024-07-09T14:45:42.547Z',
-      },
-      {
-        id: 8,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: '2024-07-09T14:45:42.547Z',
-        updatedAt: '2024-07-09T14:45:42.547Z',
-      },
-      {
-        id: 9,
-        quantity: 1,
-        discountPercent: 0,
-        dishId: 5,
-        dishName: 'Bánh Mì',
-        dishPrice: 30000,
-        createdAt: '2024-07-09T14:45:42.547Z',
-        updatedAt: '2024-07-09T14:45:42.547Z',
-      },
-    ],
-  },
-];
 
 const getSortedOrderDetails = (orderList: IOrderResponse[]) => {
   return orderList.sort(
@@ -250,8 +27,9 @@ const OrderList = () => {
   const [waitingTimes, setWaitingTimes] = useState<{ [key: number]: string }>(
     {},
   );
-  const [orderList, setOrderList] =
-    useState<IOrderResponse[]>(initialOrderList);
+  // initialOrderList
+  const [orderList, setOrderList] = useState<IOrderResponse[]>([]);
+  const [tableList, setTableList] = useState<ITableResponse[]>([]);
   const [visible, setVisible] = useState({ removeOrderItem: false });
   const [focusOrderDetail, setFocusOrderDetail] = useState<any>(undefined);
 
@@ -260,11 +38,15 @@ const OrderList = () => {
   }, [orderList]);
 
   const currenTable = useMemo(() => {
-    return initialTableList.map((item) => {
+    return tableList.map((item) => {
       const order = dynamicOrderList.find((e) => e.tableId === item.id);
       return { ...item, status: order?.status ?? 'free' };
     });
-  }, [dynamicOrderList]);
+  }, [dynamicOrderList, tableList]);
+
+  useEffect(() => {
+    loadTableList();
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -279,6 +61,13 @@ const OrderList = () => {
 
     return () => clearInterval(interval);
   }, [dynamicOrderList]);
+
+  const loadTableList = async () => {
+    const response = await getTables();
+    if (response?.status === 200) {
+      setTableList(response.data);
+    }
+  };
 
   const removeOrderItem = (orderId: number, itemId: number) => {
     setVisible({ ...visible, removeOrderItem: false });
@@ -328,7 +117,7 @@ const OrderList = () => {
   };
 
   const renderOrder = (order: IOrderResponse) => {
-    const table = initialTableList.find((item) => item.id === order.tableId);
+    const table = tableList.find((item) => item.id === order.tableId);
     return (
       <Col className="order_container" key={order.id}>
         <Row className="order_header" justify={'space-between'}>

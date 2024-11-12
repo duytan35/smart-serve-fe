@@ -2,19 +2,22 @@
 
 import React, { useState } from 'react';
 import './index.scss';
-// import authApi from '@/services/auth';
 import { Button } from 'antd';
 import { loginThunk } from '../../redux/actions/authThunk';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const SignInPage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(loginThunk({ mail: email, password: password }));
+    dispatch(loginThunk({ mail: email, password: password })).then(() => {
+      router.push('/home'); // Navigate to the home page after successful login
+    });
   };
 
   return (
