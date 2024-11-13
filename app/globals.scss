@@ -43,3 +43,86 @@ body {
   border: 6px solid transparent;
   background-clip: content-box;
 }
+
+// global scss
+
+$backround-color: #f5f5f5;
+$backround-color-common: #001529;
+
+// color
+$color-default: black;
+$color-light: white;
+$color-light-opacity-05: rgb(255, 255, 255, 0.5);
+$color-content-header: #00b1cc;
+
+// font weight
+$font-weight-default: 400;
+$font-weight-bold: 700;
+
+// text size
+$title-sm-text: 16px;
+$title-md-text: 24px;
+$icon-default-size: 32px;
+
+// space
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 22px;
+$space-6: 24px;
+
+$side-bar-height: 54px;
+
+.title-md {
+  font-size: $title-md-text;
+  color: $color-default;
+  font-weight: $font-weight-bold;
+}
+
+.title-sm {
+  font-size: $title-sm-text;
+  color: $color-default;
+  font-weight: $font-weight-bold;
+}
+
+.title-md {
+  font-size: $title-md-text !important;
+  color: $color-default;
+  font-weight: $font-weight-bold;
+}
+
+// ant css
+.ant-card-head {
+  background-color: $color-content-header !important;
+  color: white !important;
+  min-height: 50px !important;
+}
+
+// .ant-card-body {
+//   background-color: #001529 !important;
+// }
+
+.ant-select {
+  width: 100% !important;
+}
+
+.one-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  transition: 0.3s;
+}
+
+.three-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  transition: 0.3s;
+}

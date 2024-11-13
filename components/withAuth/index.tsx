@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { redirect } from 'next/navigation';
-import AuthLayout from '../layouts/auth';
+import AuthLayout from '../../layouts/auth';
 
 const withAuth = (WrappedComponent: any) => {
   return function WithAuth(props: any) {
