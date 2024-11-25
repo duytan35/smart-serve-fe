@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '../redux/store'; // Adjust the import path based on your project structure
 
 const url = process.env.NEXT_PUBLIC_API_URL;
 // const url = "http://34.126.68.84:5000/api/v1";
@@ -8,7 +7,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 // api.interceptors.request.use(
@@ -43,14 +42,14 @@ const setupAxiosInterceptor = () => {
     },
   );
 
-  api.interceptors.response.use(
-    (response) => {
-      return response.data;
-    },
-    (error) => {
-      return Promise.reject(error);
-    },
-  );
+  // api.interceptors.response.use(
+  //   (response) => {
+  //     return response.data;
+  //   },
+  //   (error) => {
+  //     return Promise.reject(error);
+  //   },
+  // );
 };
 setupAxiosInterceptor();
 

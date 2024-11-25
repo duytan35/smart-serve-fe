@@ -25,9 +25,9 @@ const userSlice = createSlice({
     builder.addCase(loginThunk.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accesstoken', action.payload?.data?.accessToken);
-      }
+      console.log(action.payload);
+
+      localStorage.setItem('accesstoken', action.payload?.accessToken);
     });
     builder.addCase(loginThunk.rejected, (state, action) => {
       state.loading = false;

@@ -15,7 +15,7 @@ const sidebarNavigate: SidebarNavItem[] = [
   {
     name: 'orderList',
     icon: BringToFront,
-    path: '/orderList',
+    path: '/order-list',
   },
   {
     name: 'menuList',

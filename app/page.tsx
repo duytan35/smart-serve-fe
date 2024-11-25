@@ -2,6 +2,8 @@
 import { useEffect } from 'react';
 import './page.scss';
 import { useRouter } from 'next/navigation';
+import { Row } from 'antd';
+import MainHeader from '@/components/MainHeader';
 
 const Home = () => {
   const router = useRouter();
@@ -10,7 +12,11 @@ const Home = () => {
 
     // router.push('/home');
   }, []);
-  return <div>This is root page</div>;
+  return (
+    <Row>
+      <MainHeader />
+    </Row>
+  );
 };
 
 export default Home;

@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Card, Col, Row } from 'antd';
+import { initializeSocket, disconnectSocket, getSocket } from '@/utils/socket';
 import './styles.scss';
 import withAuth from '@/components/withAuth';
 import { Content } from 'antd/es/layout/layout';
@@ -46,7 +47,7 @@ const OrderList = () => {
 
   useEffect(() => {
     loadTableList();
-  });
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -64,8 +65,8 @@ const OrderList = () => {
 
   const loadTableList = async () => {
     const response = await getTables();
-    if (response?.status === 200) {
-      setTableList(response.data);
+    if (response?.data?.success) {
+      setTableList(response.data?.data);
     }
   };
 
@@ -95,8 +96,6 @@ const OrderList = () => {
   };
 
   const renderTable = (table: ITable) => {
-    console.log(table.status);
-
     return (
       <Col span={8} key={table.id}>
         <Col
@@ -150,6 +149,31 @@ const OrderList = () => {
         </Row>
       </Col>
     );
+  };
+
+  // setup socket example
+  const [messages, setMessages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const socket = initializeSocket();
+
+    socket.on('connect', () => {
+      console.log('Connected to the server');
+    });
+
+    socket.on('message', (message: string) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    // Cleanup when the component unmounts
+    return () => {
+      disconnectSocket();
+    };
+  }, []);
+
+  const sendMessage = () => {
+    const socket = getSocket();
+    socket.emit('message', 'Hello from Next.js!');
   };
 
   return (
