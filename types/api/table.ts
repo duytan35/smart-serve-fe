@@ -6,3 +6,8 @@ export interface ITableResponse {
   seats: number;
   updatedAt: string;
 }
+
+export interface ITablApiResponse {
+  success: boolean;
+  data: ITableResponse[];
+}

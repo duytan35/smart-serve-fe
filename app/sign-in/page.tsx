@@ -16,7 +16,7 @@ const SignInPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(loginThunk({ mail: email, password: password })).then(() => {
-      router.push('/home'); // Navigate to the home page after successful login
+      router.push('/home');
     });
   };
 

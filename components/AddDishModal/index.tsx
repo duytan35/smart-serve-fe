@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import './styles.scss';
-import { Button, Input, Modal, Typography, Upload, Flex, message } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import type { GetProp, UploadProps } from 'antd';
+import { Button, Input, Modal, Typography, Upload, message } from 'antd';
+import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
+import type { UploadFile, UploadProps } from 'antd';
+import { getImage, postImage } from '@/api/file';
 
 interface AddDishModalProps {
   dishGroupData: any;
   visible: boolean;
-  onSubmit: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onSubmit: (formDetail: any, imageIds: string[]) => void;
   onCancel: () => void;
 }
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
+type FileType = File;
 
 const beforeUpload = (file: FileType) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -37,50 +32,83 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [dishGroupName, setDishGroupName] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
+  const [formData, setFormData] = useState({
+    name: '',
+    price: 0,
+    description: '',
+  });
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDishGroupName(e.target.value);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const handleChangeImage: UploadProps['onChange'] = (info) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
+  const handleUploadChange: UploadProps['onChange'] = async (info) => {
+    const { file } = info;
+
+    // Prevent duplicate uploads
+    // if (file.status === 'uploading') return;
+
+    if (!beforeUpload(file.originFileObj as FileType)) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file.originFileObj as FileType);
+
+      const response = await postImage({ image: formData });
+
+      if (response.status === 201) {
+        const imageId = response.data?.data?.id; // Adjust based on your API response
+        const imageUrl = getImage({ imageId: imageId });
+        setFileList((prevList) => [
+          ...prevList,
+          {
+            uid: file.uid,
+            name: file.name,
+            status: 'done',
+            url: imageUrl,
+            imageId: imageId,
+          },
+        ]);
+        message.success('Image uploaded successfully!');
+      } else {
+        message.error('Image upload failed.');
+      }
+      console.log(response);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      message.error('Image upload failed.');
     }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as FileType, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
+  };
+
+  const handleRemoveImage = (file: UploadFile) => {
+    setFileList((prevList) => prevList.filter((item) => item.uid !== file.uid));
   };
 
   const uploadButton = (
-    <button style={{ border: 0, background: 'none' }} type="button">
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+    <div>
+      <PlusOutlined />
       <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
+    </div>
   );
 
-  const hanldeSudmit = async () => {
-    console.log(dishGroupName);
-    onSubmit();
+  const handleSubmit = async () => {
+    console.log(formData);
+    console.log('Uploaded Files:', fileList);
+    onSubmit(
+      formData,
+      fileList?.map((item) => item?.imageId),
+    );
   };
 
   return (
     <Modal
       title={'Thêm nhóm thực đơn'}
       footer={
-        <Button
-          onClick={hanldeSudmit}
-          type="primary"
-          icon={<CheckOutlined />}
-          iconPosition={'end'}
-        >
+        <Button onClick={handleSubmit} type="primary" icon={<CheckOutlined />}>
           Xác nhận
         </Button>
       }
@@ -89,26 +117,27 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
       centered
     >
       <Typography.Title level={5}>Tên món ăn</Typography.Title>
-      <Input value={dishGroupName} onChange={handleChange} />
-      <Typography.Title level={5}>description</Typography.Title>
-      <Input />
-      <Typography.Title level={5}>giá</Typography.Title>
-      <Input />
+      <Input name="name" value={formData.name} onChange={handleChange} />
+      <Typography.Title level={5}>Chi tiết</Typography.Title>
+      <Input
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
+      />
+      <Typography.Title level={5}>Giá</Typography.Title>
+      <Input name="price" value={formData.price} onChange={handleChange} />
       <Typography.Title level={5}>Tải ảnh</Typography.Title>
       <Upload
-        name="avatar"
+        name="images"
         listType="picture-card"
         className="avatar-uploader"
-        showUploadList={false}
-        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-        beforeUpload={beforeUpload}
-        onChange={handleChangeImage}
+        multiple
+        customRequest={() => {}}
+        onChange={handleUploadChange}
+        onRemove={handleRemoveImage}
+        fileList={fileList}
       >
-        {imageUrl ? (
-          <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-        ) : (
-          uploadButton
-        )}
+        {uploadButton}
       </Upload>
     </Modal>
   );

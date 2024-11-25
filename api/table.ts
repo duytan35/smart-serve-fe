@@ -1,11 +1,12 @@
 import { AxiosResponse } from 'axios';
 import api from './api';
+import { ITablApiResponse } from '@/types/api/table';
 
-export const getTables = async () => {
+export const getTables = async (): Promise<AxiosResponse<ITablApiResponse>> => {
   try {
     const response = await api.get('/tables');
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.log('error in getTables api/table');
     return error;
   }

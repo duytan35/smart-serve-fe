@@ -5,10 +5,9 @@ import { CheckOutlined } from '@ant-design/icons';
 
 interface AddDishGroupModalProps {
   visible: boolean;
-  onSubmit: () => void;
+  onSubmit: (name: string) => Promise<void>;
   onCancel: () => void;
 }
-
 const AddDishGroupModal: React.FC<AddDishGroupModalProps> = ({
   visible,
   onSubmit,
@@ -21,8 +20,7 @@ const AddDishGroupModal: React.FC<AddDishGroupModalProps> = ({
   };
 
   const hanldeSudmit = async () => {
-    console.log(dishGroupName);
-    onSubmit();
+    onSubmit(dishGroupName);
   };
 
   return (

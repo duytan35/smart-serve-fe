@@ -1,0 +1,14 @@
+.mbutton-prefix-icon,
+.mbutton-suffix-icon {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 4px;
+}
+
+.mbutton-prefix-icon {
+  margin-right: 8px;
+}
+
+.mbutton-suffix-icon {
+  margin-left: 8px;
+}
