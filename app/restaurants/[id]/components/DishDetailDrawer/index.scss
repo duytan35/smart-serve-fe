@@ -1,0 +1,154 @@
+.dish-detail {
+  .ant-drawer-body {
+    padding: 0px !important;
+    background-color: white;
+  }
+
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 20px !important;
+    font-weight: 600;
+    color: aliceblue;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: aliceblue;
+  }
+
+  .close-button {
+    position: fixed;
+    z-index: 10;
+    top: 12px;
+    left: 12px;
+    background-color: white;
+    opacity: 0.8;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header {
+    .images-swiper {
+      height: 25vh;
+    }
+
+    .dish-info {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 10px;
+
+      .name-price-box {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+
+        .name {
+          flex: 1;
+          font-size: 22px;
+          font-weight: 600;
+        }
+
+        .price {
+          max-width: 100px;
+          font-size: 22px;
+          font-weight: 600;
+        }
+      }
+
+      .address {
+        color: #2b2b2b;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+    }
+  }
+
+  .body {
+    flex: 1;
+    border-top: 10px solid #f0f0f0;
+  }
+
+  .note-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .note-label {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .note-input {
+      min-width: 100%;
+      max-width: 100%;
+      height: 60px;
+      border: 1px solid #d4d4d4;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .note-input:focus {
+      border-color: #ee702d;
+    }
+  }
+
+  .actions-container {
+    padding-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+
+    .action-box {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .decrease,
+    .increase {
+      border: 1px solid #f0f0f0;
+    }
+
+    .quantity {
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+
+  .footer {
+    width: 100%;
+    padding: 10px;
+    padding-top: 14px;
+    padding-bottom: 20px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+
+    button {
+      width: 100%;
+      height: 44px;
+      background-color: #ee702d;
+      border-radius: 6px;
+      border: none;
+      color: white;
+      outline: none;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+}

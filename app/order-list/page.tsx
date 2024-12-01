@@ -8,10 +8,10 @@ import { Content } from 'antd/es/layout/layout';
 import { calculateWaitingTime } from '@/utils/utils';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import RemoveOrderModal from '@/components/RemoveOrderModal';
-import { IOrderResponse } from '@/types/api/order';
-import { ITableResponse } from '@/types/api/table';
+import { IOrderResponse } from '@/types/order';
+import { ITableResponse } from '@/types/table';
 import { orderStatus } from '@/contants/orderStatus';
-import { getTables } from '@/api/table';
+import { getTables } from '@/services/table';
 
 interface ITable extends ITableResponse {
   status: string;

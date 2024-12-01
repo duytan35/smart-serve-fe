@@ -32,7 +32,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "contants/sidebar.ts"
+    "contants/sidebar.ts",
+    "next.config.js"
   ],
   "exclude": [
     "node_modules"
