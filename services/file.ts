@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import api from './api';
 const url = process.env.NEXT_PUBLIC_API_URL;
 
-export const getImage = ({ imageId }: { imageId: string }) => {
+export const getImage = (imageId: string) => {
   return url + '/files/' + imageId;
 };
 

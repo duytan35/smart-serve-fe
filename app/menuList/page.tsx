@@ -17,13 +17,13 @@ import {
   getDishesByDishGroupId,
   getDishgroup,
 } from '../../services/dishes';
-import { IDishedGroupResponse, IDishedResponse } from '@/types/dished';
+import { IDishGroupResponse, IDishResponse } from '@/types/dish';
 import { getImage } from '@/services/file';
 
 const MenuList = () => {
   const router = useRouter();
-  const [menuList, setMenuList] = useState<IDishedGroupResponse[]>([]);
-  const [menuListData, setMenuListData] = useState<IDishedResponse[]>([]);
+  const [menuList, setMenuList] = useState<IDishGroupResponse[]>([]);
+  const [menuListData, setMenuListData] = useState<IDishResponse[]>([]);
   const [selectMenuIndex, setSelectMenuIndex] = useState<number>(0);
   const [visible, setVisible] = useState({
     addDishGroupModal: false,
@@ -86,7 +86,7 @@ const MenuList = () => {
     }
   };
 
-  const renderDish = (dish: IDishedResponse, index: number) => {
+  const renderDish = (dish: IDishResponse, index: number) => {
     return (
       <Col
         // span={12}
@@ -106,7 +106,7 @@ const MenuList = () => {
               height={'100%'}
               src={
                 dish.imageIds.length > 0
-                  ? getImage({ imageId: dish?.imageIds[0] })
+                  ? getImage(dish?.imageIds[0])
                   : 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
               }
               alt="dishImage"

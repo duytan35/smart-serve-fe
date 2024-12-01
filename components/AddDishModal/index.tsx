@@ -62,7 +62,7 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
 
       if (response.status === 201) {
         const imageId = response.data?.data?.id; // Adjust based on your API response
-        const imageUrl = getImage({ imageId: imageId });
+        const imageUrl = getImage(imageId);
         setFileList((prevList) => [
           ...prevList,
           {
