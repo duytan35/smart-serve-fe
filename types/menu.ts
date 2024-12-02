@@ -1,9 +1,9 @@
-import { IDishResponse } from './dish';
+import { IDish } from './dish';
 
 export interface IDishGroup {
   id: number;
   groupName: string;
-  dishes: IDishResponse[];
+  dishes: IDish[];
 }
 
 export interface IMenu {

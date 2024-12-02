@@ -35,3 +35,14 @@ export const calculateWaitingTime = (createdAt: string): string => {
   return `${padZero(diffHours)}:${padZero(diffMinutes)}`;
   // return `${padZero(diffHours)}:${padZero(diffMinutes)}:${padZero(diffSeconds)}`;
 };
+
+export const formatCurrency = (price: number) => {
+  const [integerPart, decimalPart] = price.toString().split('.');
+  const formattedIntegerPart = integerPart.replace(
+    /\B(?=(\d{3})+(?!\d))/g,
+    ',',
+  );
+  return decimalPart
+    ? `${formattedIntegerPart}.${decimalPart}`
+    : formattedIntegerPart;
+};

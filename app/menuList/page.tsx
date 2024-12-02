@@ -17,13 +17,13 @@ import {
   getDishesByDishGroupId,
   getDishgroup,
 } from '../../services/dishes';
-import { IDishGroupResponse, IDishResponse } from '@/types/dish';
+import { IDishGroup, IDish } from '@/types/dish';
 import { getImage } from '@/services/file';
 
 const MenuList = () => {
   const router = useRouter();
-  const [menuList, setMenuList] = useState<IDishGroupResponse[]>([]);
-  const [menuListData, setMenuListData] = useState<IDishResponse[]>([]);
+  const [menuList, setMenuList] = useState<IDishGroup[]>([]);
+  const [menuListData, setMenuListData] = useState<IDish[]>([]);
   const [selectMenuIndex, setSelectMenuIndex] = useState<number>(0);
   const [visible, setVisible] = useState({
     addDishGroupModal: false,
@@ -86,7 +86,7 @@ const MenuList = () => {
     }
   };
 
-  const renderDish = (dish: IDishResponse, index: number) => {
+  const renderDish = (dish: IDish, index: number) => {
     return (
       <Col
         // span={12}
