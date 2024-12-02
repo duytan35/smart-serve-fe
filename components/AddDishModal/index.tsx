@@ -3,7 +3,7 @@ import './styles.scss';
 import { Button, Input, Modal, Typography, Upload, message } from 'antd';
 import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import type { UploadFile, UploadProps } from 'antd';
-import { getImage, postImage } from '@/api/file';
+import { getImage, postImage } from '@/services/file';
 
 interface AddDishModalProps {
   dishGroupData: any;

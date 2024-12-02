@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
-import api from './api';
 import { ITablApiResponse } from '@/types/api/table';
+import api from './api';
 
 export const getTables = async (): Promise<AxiosResponse<ITablApiResponse>> => {
   try {

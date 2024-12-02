@@ -16,3 +16,16 @@ export const login = async (mail: string, password: string) => {
     return error;
   }
 };
+
+export const getUser = async () => {
+  try {
+    const response = await api.get('/auth/me');
+    console.log(response);
+
+    return response;
+  } catch (error: any) {
+    console.log('error in getUser api/auth : ', error);
+
+    return error;
+  }
+};

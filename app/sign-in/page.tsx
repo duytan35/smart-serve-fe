@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import './index.scss';
 import { Button } from 'antd';
-import { loginThunk } from '../../redux/actions/authThunk';
+import { getMeThunk, loginThunk } from '../../redux/actions/authThunk';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 
@@ -15,9 +15,26 @@ const SignInPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(loginThunk({ mail: email, password: password })).then(() => {
-      router.push('/home');
-    });
+
+    try {
+      // Dispatch loginThunk and wait for it to complete
+      const loginResult = await dispatch(
+        loginThunk({ mail: email, password: password }),
+      );
+
+      if (loginThunk.fulfilled.match(loginResult)) {
+        dispatch(getMeThunk()).then(() => {
+          router.push('/home');
+        });
+      } else {
+        console.error(
+          'Login failed:',
+          loginResult.payload || loginResult.error.message,
+        );
+      }
+    } catch (error) {
+      console.error('Error in handleSubmit:', error);
+    }
   };
 
   return (

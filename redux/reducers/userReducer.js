@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginThunk } from '../actions/authThunk';
+import { getMeThunk, loginThunk } from '../actions/authThunk';
 
 const initialState = {
   user: {},
@@ -24,12 +24,22 @@ const userSlice = createSlice({
     });
     builder.addCase(loginThunk.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload;
-      console.log(action.payload);
-
       localStorage.setItem('accesstoken', action.payload?.accessToken);
     });
     builder.addCase(loginThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.message;
+    });
+
+    builder.addCase(getMeThunk.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getMeThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+      console.log(action.payload);
+    });
+    builder.addCase(getMeThunk.rejected, (state, action) => {
       state.loading = false;
       state.error = action.message;
     });

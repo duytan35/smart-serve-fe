@@ -16,9 +16,9 @@ import {
   createDishgroup,
   getDishesByDishGroupId,
   getDishgroup,
-} from '../../api/dishes';
+} from '../../services/dishes';
 import { IDishedGroupResponse, IDishedResponse } from '@/types/api/dished';
-import { getImage } from '@/api/file';
+import { getImage } from '@/services/file';
 
 const MenuList = () => {
   const router = useRouter();

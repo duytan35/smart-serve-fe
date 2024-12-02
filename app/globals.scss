@@ -74,12 +74,6 @@ $space-6: 24px;
 
 $side-bar-height: 54px;
 
-.title-md {
-  font-size: $title-md-text;
-  color: $color-default;
-  font-weight: $font-weight-bold;
-}
-
 .title-sm {
   font-size: $title-sm-text;
   color: $color-default;
@@ -125,4 +119,8 @@ $side-bar-height: 54px;
   text-overflow: ellipsis;
   white-space: normal;
   transition: 0.3s;
+}
+
+.color-white {
+  color: white;
 }
