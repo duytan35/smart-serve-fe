@@ -7,10 +7,11 @@ import Mbutton from '../BasicUi/MButton/Mbutton';
 import { removeUser } from '@/redux/reducers/userReducer';
 import { useRouter } from 'next/navigation';
 import { getMeThunk } from '@/redux/actions/authThunk';
+import { AppDispatch } from '@/redux/store';
 
 const Header = () => {
   const user = useSelector(userSelector);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const logout = () => {
@@ -28,7 +29,7 @@ const Header = () => {
         router.push('/sign-in');
       }
     }
-  }, [user]);
+  }, [dispatch, router, user]);
 
   return (
     <Row className="header_container" gutter={20} justify={'space-between'}>

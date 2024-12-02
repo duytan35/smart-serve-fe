@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Card, Col, Row } from 'antd';
-import { initializeSocket, disconnectSocket, getSocket } from '@/utils/socket';
+import { initializeSocket, disconnectSocket } from '@/utils/socket';
 import './styles.scss';
 import withAuth from '@/components/withAuth';
 import { Content } from 'antd/es/layout/layout';
@@ -172,6 +172,7 @@ const OrderList = () => {
 
   // setup socket example
   const [messages, setMessages] = useState<string[]>([]);
+  console.log(messages);
 
   useEffect(() => {
     const socket = initializeSocket();
@@ -190,10 +191,10 @@ const OrderList = () => {
     };
   }, []);
 
-  const sendMessage = () => {
-    const socket = getSocket();
-    socket.emit('message', 'Hello from Next.js!');
-  };
+  // const sendMessage = () => {
+  //   const socket = getSocket();
+  //   socket.emit('message', 'Hello from Next.js!');
+  // };
 
   return (
     <div className="order_list_container">

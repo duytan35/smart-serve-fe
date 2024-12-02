@@ -3,12 +3,13 @@
 import React, { useState } from 'react';
 import './index.scss';
 import { Button } from 'antd';
-import { getMeThunk, loginThunk } from '../../redux/actions/authThunk';
+import { loginThunk, getMeThunk } from '../../redux/actions/authThunk';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import type { AppDispatch } from '../../redux/store'; // Adjust the path to store.js
 
 const SignInPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>(); // Use typed dispatch
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,19 +18,15 @@ const SignInPage = () => {
     e.preventDefault();
 
     try {
-      // Dispatch loginThunk and wait for it to complete
-      const loginResult = await dispatch(
-        loginThunk({ mail: email, password: password }),
-      );
+      const loginResult = await dispatch(loginThunk({ mail: email, password }));
 
       if (loginThunk.fulfilled.match(loginResult)) {
-        dispatch(getMeThunk()).then(() => {
-          router.push('/home');
-        });
+        await dispatch(getMeThunk());
+        router.push('/home');
       } else {
         console.error(
           'Login failed:',
-          loginResult.payload || loginResult.error.message,
+          loginResult.payload || loginResult.error?.message,
         );
       }
     } catch (error) {

@@ -5,10 +5,14 @@ import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import type { UploadFile, UploadProps } from 'antd';
 import { getImage, postImage } from '@/services/file';
 
+// Extend the UploadFile type to include the custom imageId property
+interface CustomUploadFile extends UploadFile {
+  imageId?: string;
+}
+
 interface AddDishModalProps {
   dishGroupData: any;
   visible: boolean;
-  // eslint-disable-next-line no-unused-vars
   onSubmit: (formDetail: any, imageIds: string[]) => void;
   onCancel: () => void;
 }
@@ -37,7 +41,7 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
     price: 0,
     description: '',
   });
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<CustomUploadFile[]>([]); // Use the extended type
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevFormData) => ({
@@ -48,9 +52,6 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
 
   const handleUploadChange: UploadProps['onChange'] = async (info) => {
     const { file } = info;
-
-    // Prevent duplicate uploads
-    // if (file.status === 'uploading') return;
 
     if (!beforeUpload(file.originFileObj as FileType)) return;
 
@@ -70,8 +71,8 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
             name: file.name,
             status: 'done',
             url: imageUrl,
-            imageId: imageId,
-          },
+            imageId: imageId, // Add the imageId to the file
+          } as CustomUploadFile, // Ensure it's cast to the correct type
         ]);
         message.success('Image uploaded successfully!');
       } else {
@@ -84,7 +85,7 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
     }
   };
 
-  const handleRemoveImage = (file: UploadFile) => {
+  const handleRemoveImage = (file: CustomUploadFile) => {
     setFileList((prevList) => prevList.filter((item) => item.uid !== file.uid));
   };
 
@@ -100,7 +101,7 @@ const AddDishModal: React.FC<AddDishModalProps> = ({
     console.log('Uploaded Files:', fileList);
     onSubmit(
       formData,
-      fileList?.map((item) => item?.imageId),
+      fileList?.map((item) => item?.imageId as string), // Ensure imageId is used safely
     );
   };
 
