@@ -1,14 +1,3 @@
-export const formatPrice = (price: Number) => {
-  const numberString = String(price);
-  const numberArray = numberString?.split('');
-  const dotPosition = numberArray?.length % 3 || 3;
-  for (let i = dotPosition; i < numberArray?.length; i += 4) {
-    numberArray?.splice(i, 0, '.');
-  }
-  const formattedNumber = numberArray.join('');
-  return formattedNumber;
-};
-
 export const formatDate = (date: any) => {
   const startDateString = date;
   const startDate = new Date(startDateString);
@@ -45,4 +34,33 @@ export const formatCurrency = (price: number) => {
   return decimalPart
     ? `${formattedIntegerPart}.${decimalPart}`
     : formattedIntegerPart;
+};
+
+export const timeDifferenceFromNow = (inputTime: string) => {
+  const now = new Date();
+  const inputDate = new Date(inputTime);
+
+  const diffInSeconds = Math.floor(
+    (now.getTime() - inputDate.getTime()) / 1000,
+  );
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds}s ago`;
+  }
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes}m ago`;
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    const remainingMinutes = diffInMinutes % 60;
+    return remainingMinutes > 0
+      ? `${diffInHours}h${remainingMinutes}m ago`
+      : `${diffInHours}h ago`;
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
 };

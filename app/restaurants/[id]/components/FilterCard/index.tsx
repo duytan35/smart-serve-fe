@@ -8,9 +8,14 @@ interface FilterCardProps {
 }
 
 const FilterCard = ({ value, setFilter, isSelected }: FilterCardProps) => {
-  return <div className={`filter-card ${isSelected ? 'selected' : ''}`} onClick={() => setFilter(value)}>
-    {value}
-  </div>
-}
+  return (
+    <div
+      className={`filter-card ${isSelected ? 'selected' : ''}`}
+      onClick={() => setFilter(value)}
+    >
+      {value}
+    </div>
+  );
+};
 
 export default FilterCard;

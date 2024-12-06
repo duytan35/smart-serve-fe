@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import withAuth from '@/components/withAuth';
 import { Content } from 'antd/es/layout/layout';
 import './styles.scss';
-import { formatPrice } from '@/utils/utils';
+import { formatCurrency } from '@/utils';
 import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import AddDishGroupModal from '@/components/AddDishGroupModal';
@@ -122,7 +122,7 @@ const MenuList = () => {
               >
                 {dish.name}
               </Col>
-              <Col className="dish_price">{formatPrice(dish.price)} VND</Col>
+              <Col className="dish_price">{formatCurrency(dish.price)} VND</Col>
             </Row>
             <Row>{dish.description}</Row>
           </Col>

@@ -5,19 +5,19 @@ import { initializeSocket, disconnectSocket, getSocket } from '@/utils/socket';
 import './styles.scss';
 import withAuth from '@/components/withAuth';
 import { Content } from 'antd/es/layout/layout';
-import { calculateWaitingTime } from '@/utils/utils';
+import { calculateWaitingTime } from '@/utils';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import RemoveOrderModal from '@/components/RemoveOrderModal';
-import { IOrderResponse } from '@/types/order';
+import { IOrder } from '@/types/order';
 import { ITableResponse } from '@/types/table';
-import { orderStatus } from '@/contants/orderStatus';
+import { OrderStatus } from '@/constants';
 import { getTables } from '@/services/table';
 
 interface ITable extends ITableResponse {
   status: string;
 }
 
-const getSortedOrderDetails = (orderList: IOrderResponse[]) => {
+const getSortedOrderDetails = (orderList: IOrder[]) => {
   return orderList.sort(
     (a: any, b: any) =>
       new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
@@ -29,7 +29,7 @@ const OrderList = () => {
     {},
   );
   // initialOrderList
-  const [orderList, setOrderList] = useState<IOrderResponse[]>([]);
+  const [orderList, setOrderList] = useState<IOrder[]>([]);
   const [tableList, setTableList] = useState<ITableResponse[]>([]);
   const [visible, setVisible] = useState({ removeOrderItem: false });
   const [focusOrderDetail, setFocusOrderDetail] = useState<any>(undefined);
@@ -102,7 +102,7 @@ const OrderList = () => {
           className="table_container"
           style={{
             backgroundColor:
-              table.status === orderStatus.InProgress ? 'orange' : '#04f400',
+              table.status === OrderStatus.InProgress ? 'orange' : '#04f400',
           }}
         >
           <Row className="table_header" justify={'space-between'}>
@@ -115,7 +115,7 @@ const OrderList = () => {
     );
   };
 
-  const renderOrder = (order: IOrderResponse) => {
+  const renderOrder = (order: IOrder) => {
     const table = tableList.find((item) => item.id === order.tableId);
     return (
       <Col className="order_container" key={order.id}>

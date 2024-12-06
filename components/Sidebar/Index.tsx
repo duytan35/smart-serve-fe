@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { Col, Row } from 'antd';
 import { usePathname } from 'next/navigation';
-import sidebarNavigate from '../../contants/sidebar';
+import { SidebarNavigate } from '../../constants';
 
 import './styles.scss';
 import Link from 'next/link';
@@ -18,7 +18,7 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   const sidebarIndex = useMemo(() => {
-    const navIndex = sidebarNavigate.findIndex((item) =>
+    const navIndex = SidebarNavigate.findIndex((item) =>
       pathname.includes(item.path),
     );
     return navIndex !== -1 ? navIndex : 0;
@@ -49,7 +49,7 @@ const Sidebar = () => {
           className="nav_item_background"
           style={{ top: 54 * sidebarIndex + sidebarIndex * 12 }}
         ></Col>
-        {sidebarNavigate.map((item, key) => {
+        {SidebarNavigate.map((item, key) => {
           return renderNavIcon(item, key);
         })}
       </Row>

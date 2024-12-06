@@ -11,15 +11,25 @@ import { Minus, Plus, X } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IDish, IDishInCart } from '@/types/dish';
 import { getImage } from '@/services/file';
-import { formatCurrency } from '@/utils/utils';
+import { formatCurrency } from '@/utils';
 
-const Header = ({ dish, totalPrice }: { dish: IDish, totalPrice: string }) => {
+const Header = ({ dish, totalPrice }: { dish: IDish; totalPrice: string }) => {
   return (
     <div className="header">
-      <Swiper navigation={true} pagination={true} modules={[Navigation, Pagination]} className="images-swiper">
+      <Swiper
+        navigation={true}
+        pagination={true}
+        modules={[Navigation, Pagination]}
+        className="images-swiper"
+      >
         {dish.imageIds.map((imageId) => (
           <SwiperSlide key={imageId}>
-            <Image src={getImage(imageId)} alt="Dish image" fill={true} objectFit='cover' />
+            <Image
+              src={getImage(imageId)}
+              alt="Dish image"
+              fill={true}
+              objectFit="cover"
+            />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -32,8 +42,8 @@ const Header = ({ dish, totalPrice }: { dish: IDish, totalPrice: string }) => {
         <p>{dish.description}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface DishDetailProps {
   dishDetail: IDish | null;
@@ -44,17 +54,23 @@ interface DishDetailProps {
   handleChangeToCart: (dish: IDish, quantity: number, note?: string) => void;
 }
 
-const DishDetailDrawer = ({ dishDetail, dishDetailOpen, setDishDetailOpen, dishInCart, handleChangeToCart }: DishDetailProps) => {
+const DishDetailDrawer = ({
+  dishDetail,
+  dishDetailOpen,
+  setDishDetailOpen,
+  dishInCart,
+  handleChangeToCart,
+}: DishDetailProps) => {
   const [note, setNote] = useState<string | undefined>(dishInCart?.note);
   const [quantity, setQuantity] = useState<number>(dishInCart?.quantity ?? 1);
 
   useEffect(() => {
-    setQuantity(dishInCart?.quantity ?? 1)
-  }, [dishInCart?.quantity])
+    setQuantity(dishInCart?.quantity ?? 1);
+  }, [dishInCart?.quantity]);
 
   useEffect(() => {
-    setNote(dishInCart?.note)
-  }, [dishDetail, dishInCart?.note])
+    setNote(dishInCart?.note);
+  }, [dishDetail, dishInCart?.note]);
 
   if (!dishDetail) return null;
 
@@ -63,40 +79,61 @@ const DishDetailDrawer = ({ dishDetail, dishDetailOpen, setDishDetailOpen, dishI
 
   return (
     <Drawer
-        placement="bottom"
-        closable={false}
-        open={dishDetailOpen}
-        key="bottom"
-        height="100%"
-        className="dish-detail"
+      placement="bottom"
+      closable={false}
+      open={dishDetailOpen}
+      key="bottom"
+      height="100%"
+      className="dish-detail"
+    >
+      <div
+        className="close-button"
+        onClick={() => {
+          setDishDetailOpen(false);
+          setNote('');
+        }}
       >
-        <div className="close-button" onClick={() => setDishDetailOpen(false)}>
-          <X />
+        <X />
+      </div>
+      <Header dish={dishDetail} totalPrice={totalPrice} />
+      <div className="body">
+        <div className="note-container">
+          <p className="note-label">Note to restaurant</p>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            className="note-input"
+            placeholder="Optional"
+          />
         </div>
-        <Header dish={dishDetail} totalPrice={totalPrice} />
-        <div className="body">
-          <div className="note-container">
-            <p className="note-label">Note to restaurant</p>
-            <textarea value={note} onChange={(e) => setNote(e.target.value)} className="note-input" placeholder="Optional" />
+        <div className="actions-container">
+          <div
+            className="decrease action-box"
+            onClick={() => setQuantity(quantity - 1)}
+          >
+            <Minus size={16} color="#ee702d" strokeWidth={3} />
           </div>
-          <div className="actions-container">
-            <div className="decrease action-box" onClick={() => setQuantity(quantity - 1)}>
-              <Minus size={16} color="#ee702d" strokeWidth={3} />
-            </div>
-            <div className="quantity action-box">{quantity}</div>
-            <div className="increase action-box" onClick={() => setQuantity(quantity + 1)}>
-              <Plus size={16} color="#ee702d" strokeWidth={3} />
-            </div>
+          <div className="quantity action-box">{quantity}</div>
+          <div
+            className="increase action-box"
+            onClick={() => setQuantity(quantity + 1)}
+          >
+            <Plus size={16} color="#ee702d" strokeWidth={3} />
           </div>
         </div>
-        <div className="footer">
-          <button onClick={() => {
+      </div>
+      <div className="footer">
+        <button
+          onClick={() => {
             handleChangeToCart(dishDetail, quantityChanged, note);
             setDishDetailOpen(false);
-          }}>Add to cart - {totalPrice}</button>
-        </div>
-      </Drawer>
-  )
-}
+          }}
+        >
+          Add to cart - {totalPrice}
+        </button>
+      </div>
+    </Drawer>
+  );
+};
 
 export default DishDetailDrawer;

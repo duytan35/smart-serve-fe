@@ -13,4 +13,11 @@ export interface IMenu {
   restaurantAddress: string;
 
   menu: IDishGroup[];
+  steps: Step[];
+}
+
+export interface Step {
+  id: number;
+  name: string;
+  step: number;
 }

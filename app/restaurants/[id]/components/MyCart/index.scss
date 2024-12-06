@@ -71,7 +71,7 @@
 
         .row {
           display: flex;
-          gap: 6px;
+          gap: 8px;
           justify-content: space-between;
 
           .actions-container {
@@ -118,7 +118,14 @@
             .note-container {
               display: flex;
               gap: 6px;
+              align-items: start;
+            }
+
+            .icon-note {
+              height: 24px;
+              display: flex;
               align-items: center;
+              justify-content: center;
             }
 
             .note {
@@ -127,6 +134,17 @@
               width: fit-content;
               border-radius: 4px;
               outline: none;
+              line-height: 16px;
+              white-space: pre-wrap;
+              word-break: break-word;
+              outline: none;
+              border: none;
+            }
+
+            .textarea {
+              flex: 1;
+              resize: vertical;
+              height: 60px;
             }
           }
 
@@ -145,6 +163,10 @@
           }
         }
       }
+    }
+
+    .empty-text {
+      margin: 10px auto;
     }
 
     .order-button {
