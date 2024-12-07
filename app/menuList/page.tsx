@@ -30,6 +30,7 @@ const MenuList = () => {
     addDishModal: false,
   });
   const [loading, setLoading] = useState(false);
+  console.log(loading);
 
   useEffect(() => {
     loadMenuList();

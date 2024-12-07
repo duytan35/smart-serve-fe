@@ -1,5 +1,4 @@
 'use client';
-import type { Metadata } from 'next';
 import './globals.scss';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { Provider } from 'react-redux';

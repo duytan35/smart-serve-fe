@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Card, Col, Row } from 'antd';
-import { initializeSocket, disconnectSocket, getSocket } from '@/utils/socket';
+import { initializeSocket, disconnectSocket } from '@/utils/socket';
 import './styles.scss';
 import withAuth from '@/components/withAuth';
 import { Content } from 'antd/es/layout/layout';
@@ -12,6 +12,7 @@ import { IOrder } from '@/types/order';
 import { ITableResponse } from '@/types/table';
 import { OrderStatus } from '@/constants';
 import { getTables } from '@/services/table';
+import { getOrders } from '@/services/order';
 
 interface ITable extends ITableResponse {
   status: string;
@@ -47,6 +48,7 @@ const OrderList = () => {
 
   useEffect(() => {
     loadTableList();
+    loadOrderList();
   }, []);
 
   useEffect(() => {
@@ -67,6 +69,15 @@ const OrderList = () => {
     const response = await getTables();
     if (response?.data?.success) {
       setTableList(response.data?.data);
+    }
+  };
+
+  const loadOrderList = async () => {
+    const response = await getOrders();
+    console.log(response.data?.data);
+
+    if (response?.data?.success) {
+      setOrderList(response.data?.data);
     }
   };
 
@@ -95,6 +106,10 @@ const OrderList = () => {
     });
   };
 
+  const handleConfirmOrder = (order: IOrder) => {
+    console.log(order);
+  };
+
   const renderTable = (table: ITable) => {
     return (
       <Col span={8} key={table.id}>
@@ -120,7 +135,9 @@ const OrderList = () => {
     return (
       <Col className="order_container" key={order.id}>
         <Row className="order_header" justify={'space-between'}>
-          <Col className="order_name">{table?.name} </Col>
+          <Col className="order_name">
+            {table?.name} : {order?.status}{' '}
+          </Col>
           <Col className="table_status">
             {waitingTimes[order.id] ||
               calculateWaitingTime(String(order.createdAt))}
@@ -144,7 +161,9 @@ const OrderList = () => {
         ))}
         <Row gutter={[12, 12]} justify={'end'}>
           <Col>
-            <Button type="primary">Xác nhận</Button>
+            <Button onClick={() => handleConfirmOrder(order)} type="primary">
+              Xác nhận
+            </Button>
           </Col>
         </Row>
       </Col>
@@ -153,6 +172,7 @@ const OrderList = () => {
 
   // setup socket example
   const [messages, setMessages] = useState<string[]>([]);
+  console.log(messages);
 
   useEffect(() => {
     const socket = initializeSocket();
@@ -171,10 +191,10 @@ const OrderList = () => {
     };
   }, []);
 
-  const sendMessage = () => {
-    const socket = getSocket();
-    socket.emit('message', 'Hello from Next.js!');
-  };
+  // const sendMessage = () => {
+  //   const socket = getSocket();
+  //   socket.emit('message', 'Hello from Next.js!');
+  // };
 
   return (
     <div className="order_list_container">
