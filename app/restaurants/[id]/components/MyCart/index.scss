@@ -180,5 +180,9 @@
       font-size: 16px;
       font-weight: 500;
     }
+
+    .order-button:disabled {
+      opacity: 0.7;
+    }
   }
 }

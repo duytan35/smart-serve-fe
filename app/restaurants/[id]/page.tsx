@@ -13,6 +13,11 @@ import { IDish, IDishInCart } from '@/types/dish';
 import { getImage } from '@/services/file';
 import useSWRMutation from 'swr/mutation';
 import { notification } from 'antd';
+import { disconnectSocket, initializeWebSocket } from '@/utils/socket';
+import { IWebSocketMessage } from '@/types/order';
+import { NotFound } from '@/components/NotFound';
+import { WebSocketEvent } from '@/constants';
+import { Loading } from '@/components/Loading';
 
 interface ActionsProps {
   dish: IDish;
@@ -73,6 +78,33 @@ const ClientPage = () => {
   const [dishDetail, setDishDetail] = useState<IDish | null>(null);
   const [myCartOpen, setMyCartOpen] = useState(false);
   const [dishesInCart, setDishesInCart] = useState<IDishInCart[]>([]);
+  const [isSynced, setIsSynced] = useState(false);
+
+  useEffect(() => {
+    const socket = initializeWebSocket(`${restaurantId}_${tableId}`);
+
+    socket.onmessage = (event) => {
+      const message: IWebSocketMessage = JSON.parse(event.data);
+      if (message.event === WebSocketEvent.ORDER_UPDATED) {
+        mutate('table-order');
+      }
+    };
+
+    return () => {
+      disconnectSocket();
+    };
+  }, [restaurantId, tableId]);
+
+  useEffect(() => {
+    if (!isSynced) return;
+    localStorage.setItem('cart', JSON.stringify(dishesInCart));
+  }, [dishesInCart, isSynced]);
+
+  useEffect(() => {
+    const cart = localStorage?.getItem('cart');
+    setDishesInCart(cart ? JSON.parse(cart) : []);
+    setIsSynced(true);
+  }, []);
 
   const { trigger: triggerCreateOrder, isMutating: isCreatingOrder } =
     useSWRMutation(
@@ -114,16 +146,10 @@ const ClientPage = () => {
   );
 
   if (error) {
-    return (
-      <div>
-        <h1>Oops! The page not found!</h1>
-      </div>
-    );
+    return <NotFound />;
   }
 
-  if (!data || isMenuLoading) return null;
-
-  console.log(data);
+  if (!data || isMenuLoading) return <Loading />;
 
   const handleChangeToCart = (dish: IDish, quantity: number, note?: string) => {
     const dishInCart = dishesInCart.find(
@@ -175,14 +201,6 @@ const ClientPage = () => {
   };
 
   const handleOrder = async () => {
-    if (dishesInCart.length === 0) {
-      notification.warning({
-        message: 'Cart is empty',
-        description: 'Please add dishes to your cart before placing an order.',
-      });
-      return;
-    }
-
     const orderData = {
       tableId: Number(tableId),
       orderDetails: dishesInCart.map((item) => ({
@@ -296,6 +314,7 @@ const ClientPage = () => {
         handleChangeToCart={handleChangeToCart}
         handleOrder={handleOrder}
         handleChangeNote={handleChangeNote}
+        isCreatingOrder={isCreatingOrder}
       />
     </>
   );

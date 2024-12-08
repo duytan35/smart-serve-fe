@@ -22,3 +22,8 @@ export interface IOrder {
   updatedAt: string;
   orderDetails: IOrderDetail[];
 }
+
+export interface IWebSocketMessage {
+  data: any;
+  event: string;
+}

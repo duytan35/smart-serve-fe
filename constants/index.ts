@@ -34,3 +34,7 @@ export const OrderStatus = {
   Complete: 'Complete',
   Cancel: 'Cancel',
 };
+
+export const WebSocketEvent = {
+  ORDER_UPDATED: 'ORDER_UPDATED',
+};

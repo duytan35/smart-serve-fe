@@ -84,6 +84,7 @@ interface MyCartProps {
   handleOrder: () => void;
   // eslint-disable-next-line no-unused-vars
   handleChangeNote: (dishId: number, note: string) => void;
+  isCreatingOrder: boolean;
 }
 
 const MyCartDrawer = ({
@@ -95,6 +96,7 @@ const MyCartDrawer = ({
   handleChangeToCart,
   handleOrder,
   handleChangeNote,
+  isCreatingOrder,
 }: MyCartProps) => {
   const totalPrice = dishesInCart.reduce(
     (total, dishInCart) => total + dishInCart.dish.price * dishInCart.quantity,
@@ -201,7 +203,14 @@ const MyCartDrawer = ({
         {dishesInCart.length === 0 && (
           <div className="empty-text">No dishes found</div>
         )}
-        <button className="order-button" onClick={handleOrder}>
+        <button
+          className="order-button"
+          onClick={() => {
+            if (isCreatingOrder || dishesInCart.length === 0) return;
+            handleOrder();
+          }}
+          disabled={isCreatingOrder || dishesInCart.length === 0}
+        >
           Order - {formatCurrency(totalPrice)}
         </button>
       </div>

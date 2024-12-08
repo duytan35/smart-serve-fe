@@ -1,26 +1,24 @@
-import { io, Socket } from 'socket.io-client';
+let webSocket: WebSocket | null = null;
 
-let socket: Socket | null = null;
-
-export const initializeSocket = () => {
-  if (!socket) {
-    socket = io('http://your-server-url', {
-      transports: ['websocket'],
-    });
+export const initializeWebSocket = (room: string) => {
+  if (!webSocket) {
+    webSocket = new WebSocket(
+      `${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/${room}`,
+    );
   }
-  return socket;
+  return webSocket;
 };
 
 export const getSocket = () => {
-  if (!socket) {
+  if (!webSocket) {
     throw new Error('Socket not initialized. Call initializeSocket first.');
   }
-  return socket;
+  return webSocket;
 };
 
 export const disconnectSocket = () => {
-  if (socket) {
-    socket.disconnect();
-    socket = null;
+  if (webSocket) {
+    webSocket.close();
+    webSocket = null;
   }
 };

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Card, Col, Row } from 'antd';
-import { initializeSocket, disconnectSocket } from '@/utils/socket';
+// import { initializeSocket, disconnectSocket } from '@/utils/socket';
 import './styles.scss';
 import withAuth from '@/components/withAuth';
 import { Content } from 'antd/es/layout/layout';
@@ -174,22 +174,22 @@ const OrderList = () => {
   const [messages, setMessages] = useState<string[]>([]);
   console.log(messages);
 
-  useEffect(() => {
-    const socket = initializeSocket();
+  // useEffect(() => {
+  //   const socket = initializeSocket();
 
-    socket.on('connect', () => {
-      console.log('Connected to the server');
-    });
+  //   socket.on('connect', () => {
+  //     console.log('Connected to the server');
+  //   });
 
-    socket.on('message', (message: string) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+  //   socket.on('message', (message: string) => {
+  //     setMessages((prevMessages) => [...prevMessages, message]);
+  //   });
 
-    // Cleanup when the component unmounts
-    return () => {
-      disconnectSocket();
-    };
-  }, []);
+  //   // Cleanup when the component unmounts
+  //   return () => {
+  //     disconnectSocket();
+  //   };
+  // }, []);
 
   // const sendMessage = () => {
   //   const socket = getSocket();
