@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import withAuth from '@/components/withAuth';
 import { Content } from 'antd/es/layout/layout';
 import './styles.scss';
-import { formatPrice } from '@/utils/utils';
+import { formatCurrency } from '@/utils';
 import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import AddDishGroupModal from '@/components/AddDishGroupModal';
@@ -16,20 +16,21 @@ import {
   createDishgroup,
   getDishesByDishGroupId,
   getDishgroup,
-} from '../../api/dishes';
-import { IDishedGroupResponse, IDishedResponse } from '@/types/api/dished';
-import { getImage } from '@/api/file';
+} from '../../services/dishes';
+import { IDishGroup, IDish } from '@/types/dish';
+import { getImage } from '@/services/file';
 
 const MenuList = () => {
   const router = useRouter();
-  const [menuList, setMenuList] = useState<IDishedGroupResponse[]>([]);
-  const [menuListData, setMenuListData] = useState<IDishedResponse[]>([]);
+  const [menuList, setMenuList] = useState<IDishGroup[]>([]);
+  const [menuListData, setMenuListData] = useState<IDish[]>([]);
   const [selectMenuIndex, setSelectMenuIndex] = useState<number>(0);
   const [visible, setVisible] = useState({
     addDishGroupModal: false,
     addDishModal: false,
   });
   const [loading, setLoading] = useState(false);
+  console.log(loading);
 
   useEffect(() => {
     loadMenuList();
@@ -86,7 +87,7 @@ const MenuList = () => {
     }
   };
 
-  const renderDish = (dish: IDishedResponse, index: number) => {
+  const renderDish = (dish: IDish, index: number) => {
     return (
       <Col
         // span={12}
@@ -106,7 +107,7 @@ const MenuList = () => {
               height={'100%'}
               src={
                 dish.imageIds.length > 0
-                  ? getImage({ imageId: dish?.imageIds[0] })
+                  ? getImage(dish?.imageIds[0])
                   : 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
               }
               alt="dishImage"
@@ -122,7 +123,7 @@ const MenuList = () => {
               >
                 {dish.name}
               </Col>
-              <Col className="dish_price">{formatPrice(dish.price)} VND</Col>
+              <Col className="dish_price">{formatCurrency(dish.price)} VND</Col>
             </Row>
             <Row>{dish.description}</Row>
           </Col>

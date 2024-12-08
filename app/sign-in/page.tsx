@@ -3,21 +3,35 @@
 import React, { useState } from 'react';
 import './index.scss';
 import { Button } from 'antd';
-import { loginThunk } from '../../redux/actions/authThunk';
+import { loginThunk, getMeThunk } from '../../redux/actions/authThunk';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import type { AppDispatch } from '../../redux/store'; // Adjust the path to store.js
 
 const SignInPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>(); // Use typed dispatch
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(loginThunk({ mail: email, password: password })).then(() => {
-      router.push('/home');
-    });
+
+    try {
+      const loginResult = await dispatch(loginThunk({ mail: email, password }));
+
+      if (loginThunk.fulfilled.match(loginResult)) {
+        await dispatch(getMeThunk());
+        router.push('/home');
+      } else {
+        console.error(
+          'Login failed:',
+          loginResult.payload || loginResult.error?.message,
+        );
+      }
+    } catch (error) {
+      console.error('Error in handleSubmit:', error);
+    }
   };
 
   return (

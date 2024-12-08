@@ -9,7 +9,7 @@ const MainHeader = () => {
 
   return (
     <Row className="main-header_container" justify={'space-between'}>
-      <Col>Restaurant Management</Col>
+      <Col className="title-md color-white">Restaurant Management</Col>
       <Col>
         <Row gutter={12}>
           <Col>

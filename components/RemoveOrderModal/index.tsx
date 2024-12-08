@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './styles.scss';
-import { Button, Input, Modal, Row, Select, Typography, Upload } from 'antd';
+import { Button, Input, Modal, Row, Select, Typography } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 
 interface RemoveOrderModalProps {
@@ -11,7 +11,7 @@ interface RemoveOrderModalProps {
 }
 
 const RemoveOrderModal: React.FC<RemoveOrderModalProps> = ({
-  orderItemDetail,
+  // orderItemDetail,
   visible,
   onSubmit,
   onCancel,

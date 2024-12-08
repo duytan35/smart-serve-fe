@@ -1,4 +1,4 @@
-export interface IDishedResponse {
+export interface IDish {
   id: number;
   createdAt: string;
   updatedAt: string;
@@ -10,11 +10,17 @@ export interface IDishedResponse {
   imageIds: string[];
 }
 
-export interface IDishedGroupResponse {
+export interface IDishGroup {
   id: number;
   createdAt: string;
   updatedAt: string;
   restaurantId: string;
   name: string;
-  dishes: IDishedResponse[];
+  dishes: IDish[];
+}
+
+export interface IDishInCart {
+  dish: IDish;
+  quantity: number;
+  note?: string;
 }

@@ -6,7 +6,7 @@ type SidebarNavItem = {
   path: string;
 };
 
-const sidebarNavigate: SidebarNavItem[] = [
+export const SidebarNavigate: SidebarNavItem[] = [
   {
     name: 'home',
     icon: House,
@@ -29,4 +29,12 @@ const sidebarNavigate: SidebarNavItem[] = [
   },
 ];
 
-export default sidebarNavigate;
+export const OrderStatus = {
+  InProgress: 'InProgress',
+  Complete: 'Complete',
+  Cancel: 'Cancel',
+};
+
+export const WebSocketEvent = {
+  ORDER_UPDATED: 'ORDER_UPDATED',
+};

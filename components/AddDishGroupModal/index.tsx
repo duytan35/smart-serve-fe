@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './styles.scss';
-import { Button, Input, Modal, Typography, Upload } from 'antd';
+import { Button, Input, Modal, Typography } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 
 interface AddDishGroupModalProps {
