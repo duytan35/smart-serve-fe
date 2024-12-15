@@ -1,22 +1,23 @@
 'use client';
-import { Content } from 'antd/es/layout/layout';
+
 import './styles.scss';
-import withAuth from '@/components/withAuth';
+import { Content } from 'antd/es/layout/layout';
+import withAuth from '@/components/WithAuth';
 import { Button, Card, Col, Row } from 'antd';
 import { useSelector } from 'react-redux';
-import { userSelector } from '@/redux/selecter/mainSelector';
+// import { userSelector } from '@/redux/selecter/mainSelector';
 import { useEffect, useState } from 'react';
 import DraggableSteps from '@/components/StepComponent';
 
 const HomePage = () => {
-  const userRedux = useSelector(userSelector);
-  const [steps, setSteps] = useState(userRedux?.steps || []);
+  // const userRedux = useSelector(userSelector);
+  // const [steps, setSteps] = useState(userRedux?.steps || []);
 
-  useEffect(() => {
-    if (userRedux?.steps) {
-      setSteps(userRedux?.steps);
-    }
-  }, [userRedux]);
+  // useEffect(() => {
+  //   if (userRedux?.steps) {
+  //     setSteps(userRedux?.steps);
+  //   }
+  // }, [userRedux]);
 
   return (
     <Content className="home_container">
@@ -35,7 +36,7 @@ const HomePage = () => {
         }
       >
         <Row justify={'center'} align={'middle'} style={{ height: '100%' }}>
-          <DraggableSteps steps={steps} setSteps={setSteps} />
+          {/* <DraggableSteps steps={steps} setSteps={setSteps} /> */}
         </Row>
       </Card>
     </Content>

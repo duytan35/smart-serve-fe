@@ -10,8 +10,7 @@ import Image from 'next/image';
 import { Minus, Plus, X } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IDish, IDishInCart } from '@/types/dish';
-import { getImage } from '@/services/file';
-import { formatCurrency } from '@/utils';
+import { formatCurrency, getImage } from '@/utils';
 
 const Header = ({ dish, totalPrice }: { dish: IDish; totalPrice: string }) => {
   return (

@@ -1,0 +1,149 @@
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+
+  .container-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+
+    .title {
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .group-button {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  .menu {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex: 1;
+
+    .groups {
+      flex: 1;
+      max-width: 220px;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+
+      .group-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+
+        .name {
+          font-size: 18px;
+          font-weight: 500;
+        }
+
+        .quantity {
+          font-size: 14px;
+          color: #535353
+        }
+      }
+
+      .group-card.active {
+        border-color: #1677ff;
+        color: #1677ff;
+
+        .quantity {
+          color: #2880fb;
+        }
+      }
+    }
+
+    .divide {
+      height: 100%;
+      width: 1px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .dishes {
+      position: relative;
+      flex: 3;
+      padding-bottom: 54px;
+
+      .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (min-width: 1024px) {
+        .grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .dish-container {
+        width: 100%;
+        display: flex;
+        gap: 10px;
+        border-radius: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        padding: 4px;
+
+
+        .image-container {
+          height: 80px;
+
+          .dish-image {
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 6px;
+            width: 80px;
+            height: 80px;
+          }
+        }
+
+
+        .dish-info {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          .name,
+          .price {
+            font-weight: 500;
+          }
+
+          .description {
+            font-size: 14px;
+            color: #535353
+          }
+        }
+      }
+
+      .button-group {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+    }
+  }
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Copyright, MapPin, Minus, Plus, ShoppingBag, X } from 'lucide-react';
+import { Copyright, MapPin, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import FilterCard from './components/FilterCard';
 import DishDetailDrawer from './components/DishDetailDrawer';
@@ -10,7 +10,6 @@ import { useParams, useSearchParams } from 'next/navigation';
 import useSWR, { mutate } from 'swr';
 import ClientApi from '@/services/client';
 import { IDish, IDishInCart } from '@/types/dish';
-import { getImage } from '@/services/file';
 import useSWRMutation from 'swr/mutation';
 import { notification } from 'antd';
 import { disconnectSocket, initializeWebSocket } from '@/utils/socket';
@@ -18,6 +17,7 @@ import { IWebSocketMessage } from '@/types/order';
 import { NotFound } from '@/components/NotFound';
 import { WebSocketEvent } from '@/constants';
 import { Loading } from '@/components/Loading';
+import { getImage } from '@/utils';
 
 interface ActionsProps {
   dish: IDish;
@@ -232,8 +232,8 @@ const ClientPage = () => {
               : 'http://localhost:5000/api/v1/files/4151f059-b37e-47db-b833-c3e7e416ca3d'
           }
           alt="Restaurant image"
-          width={1000}
-          height={1000}
+          width={100}
+          height={100}
         />
         <div className="restaurant-info">
           <h1 className="name">{data.restaurantName}</h1>

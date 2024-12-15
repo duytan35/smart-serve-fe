@@ -13,8 +13,7 @@ import {
   useState,
 } from 'react';
 import { IDish, IDishInCart } from '@/types/dish';
-import { getImage } from '@/services/file';
-import { formatCurrency, timeDifferenceFromNow } from '@/utils';
+import { formatCurrency, getImage, timeDifferenceFromNow } from '@/utils';
 import useSWR from 'swr';
 import ClientApi from '@/services/client';
 import { IOrderDetail } from '@/types/order';

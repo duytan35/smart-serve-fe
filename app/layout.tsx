@@ -1,12 +1,13 @@
-'use client';
 import './globals.scss';
-import { AntdRegistry } from '@ant-design/nextjs-registry';
-import { Provider } from 'react-redux';
-import store from '../redux/store';
 
-// export const metadata: Metadata = {
-//   title: 'Smart Serve',
-// };
+import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { Metadata } from 'next';
+import { Providers } from './providers';
+
+export const metadata: Metadata = {
+  title: 'Smart serve',
+  icons: '/icon.jpg',
+};
 
 export default function RootLayout({
   children,
@@ -14,12 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Provider store={store}>
-      <html lang="en">
-        <body>
+    <html lang="en">
+      <body>
+        <Providers>
           <AntdRegistry>{children}</AntdRegistry>
-        </body>
-      </html>
-    </Provider>
+        </Providers>
+      </body>
+    </html>
   );
 }

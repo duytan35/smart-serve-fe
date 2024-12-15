@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import api from './api';
+import axiosClient from './axiosClient';
 
 export const getOrders = async () //   {
 //   id = null,
@@ -9,8 +9,8 @@ export const getOrders = async () //   {
 : Promise<AxiosResponse> => {
   try {
     // const url = `/orders${id ? `?tableId=${id}` : ''}`;
-    // const response = await api.get(url);
-    const response = await api.get('/orders');
+    // const response = await axiosClient.get(url);
+    const response = await axiosClient.get('/orders');
     return response;
   } catch (error) {
     console.error('Error fetching orders:', error);

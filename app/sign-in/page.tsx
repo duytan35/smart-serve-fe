@@ -1,43 +1,61 @@
 'use client';
 
-import React, { useState } from 'react';
 import './index.scss';
-import { Button } from 'antd';
-import { loginThunk, getMeThunk } from '../../redux/actions/authThunk';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { Button, notification } from 'antd';
 import { useRouter } from 'next/navigation';
-import type { AppDispatch } from '../../redux/store'; // Adjust the path to store.js
+import useSWRMutation from 'swr/mutation';
+import { ISignin } from '@/types/auth';
+import AuthApi from '@/services/auth/index';
+import { useDispatch } from 'react-redux';
+import { setRestaurant } from '@/store/slices/appSlice';
+import Link from 'next/link';
 
 const SignInPage = () => {
-  const dispatch = useDispatch<AppDispatch>(); // Use typed dispatch
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const { trigger: triggerSignin, isMutating: isLoading } = useSWRMutation(
+    'signin',
+    async (
+      _: string,
+      {
+        arg,
+      }: {
+        arg: ISignin;
+      },
+    ) => AuthApi.signin(arg),
+    {
+      onSuccess: (data) => {
+        const { accessToken, ...restaurant } = data;
+        notification.success({
+          message: 'Sign in successfully!',
+        });
 
-    try {
-      const loginResult = await dispatch(loginThunk({ mail: email, password }));
+        localStorage.setItem('accessToken', accessToken);
+        dispatch(setRestaurant(restaurant));
 
-      if (loginThunk.fulfilled.match(loginResult)) {
-        await dispatch(getMeThunk());
         router.push('/home');
-      } else {
-        console.error(
-          'Login failed:',
-          loginResult.payload || loginResult.error?.message,
-        );
-      }
-    } catch (error) {
-      console.error('Error in handleSubmit:', error);
-    }
+      },
+      onError: () => {
+        notification.error({
+          message: 'Sign in failed! Email or password is incorrect',
+        });
+      },
+    },
+  );
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    triggerSignin({ email, password });
   };
 
   return (
     <div className="login-container">
       <div className="login-form">
-        <h1>Login</h1>
+        <h1>Sign in</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -47,6 +65,7 @@ const SignInPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              placeholder="Email"
             />
           </div>
           <div className="form-group">
@@ -57,11 +76,23 @@ const SignInPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              placeholder="Password"
             />
           </div>
-          <Button type="primary" htmlType="submit">
-            Button Login
-          </Button>
+          <div className="button-container">
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              loading={isLoading}
+            >
+              Sign in
+            </Button>
+          </div>
+          <div className="sign-up-ref">
+            Have you created an account yet? <Link href="sign-up">Sign up</Link>{' '}
+            now!
+          </div>
         </form>
       </div>
     </div>
