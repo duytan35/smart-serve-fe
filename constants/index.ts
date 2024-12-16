@@ -37,4 +37,5 @@ export const OrderStatus = {
 
 export const WebSocketEvent = {
   ORDER_UPDATED: 'ORDER_UPDATED',
+  PLACE_ORDER: 'PLACE_ORDER',
 };

@@ -1,7 +1,8 @@
 'use client';
-import { Table } from 'antd';
+
 import './index.scss';
-import withAuth from '@/components/WithAuth';
+import { Table } from 'antd';
+import WithAuth from '@/components/WithAuth';
 
 const dataSource = [
   {
@@ -45,4 +46,4 @@ const DashboardPage = () => {
   );
 };
 
-export default withAuth(DashboardPage);
+export default WithAuth(DashboardPage);

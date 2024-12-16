@@ -42,6 +42,7 @@ const EditableNote = ({
 }: {
   note?: string;
   dishId: number;
+  // eslint-disable-next-line no-unused-vars
   handleChangeNote: (dishId: number, note: string) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);

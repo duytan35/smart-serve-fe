@@ -37,8 +37,11 @@ export const formatCurrency = (price: number) => {
     : formattedIntegerPart;
 };
 
-export const timeDifferenceFromNow = (inputTime: string) => {
-  const now = new Date();
+export const timeDifferenceFromNow = (
+  inputTime: string,
+  currentTime?: string | Date,
+) => {
+  const now = currentTime ? new Date(currentTime) : new Date();
   const inputDate = new Date(inputTime);
 
   const diffInSeconds = Math.floor(
@@ -46,7 +49,7 @@ export const timeDifferenceFromNow = (inputTime: string) => {
   );
 
   if (diffInSeconds < 60) {
-    return `${diffInSeconds}s ago`;
+    return '0m ago';
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);

@@ -1,0 +1,366 @@
+.tables-orders-container {
+  display: flex;
+  gap: 10px;
+  height: 100%;
+
+  .tables-container {
+    flex: 3;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .title {
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .tables {
+      flex: 2;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+
+      .table-card {
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        border: 2px solid #28a745;
+
+        .name {
+          font-size: 18px;
+          font-weight: 500;
+        }
+
+        .seats {
+          font-size: 14px;
+          color: #535353;
+        }
+
+        .status {
+          font-size: 14px;
+          color: #535353;
+        }
+      }
+
+      .table-card.active {
+        border-color: #eca52b;
+        cursor: pointer;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .tables {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (min-width: 1536px) {
+      .tables {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+  }
+
+  .divide {
+    height: 100%;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .orders-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .title {
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .orders {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .order-card {
+        padding: 6px;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .title {
+            font-size: 18px;
+            font-weight: 500;
+          }
+
+          .time {
+            font-size: 14px;
+            color: #535353;
+          }
+        }
+
+        .body {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+
+          .row-container {
+            display: flex;
+            flex-direction: column;
+          }
+
+          .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .name-quantity {
+              display: flex;
+              gap: 4px;
+
+              .quantity {
+                color: #535353;
+              }
+            }
+
+            .step {
+              padding: 4px 7px;
+              color: white;
+              border-radius: 4px;
+              background-color: rgba(250, 114, 40, 0.8);
+              font-size: 14px;
+            }
+
+            .actions {
+              display: flex;
+              gap: 4px;
+            }
+          }
+
+          .note-container {
+            display: flex;
+            gap: 6px;
+            align-items: start;
+          }
+
+          .icon-note {
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .note {
+            background-color: #f3f3f3;
+            padding: 4px 8px;
+            width: fit-content;
+            border-radius: 4px;
+            outline: none;
+            line-height: 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            outline: none;
+            border: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.table-order-modal {
+  .cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 10px;
+    background-color: white;
+
+    .title-time {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 12px;
+
+      img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+
+        .row {
+          display: flex;
+          gap: 8px;
+          justify-content: space-between;
+
+          .actions-container {
+            display: flex;
+            justify-content: center;
+
+            .action-box {
+              width: 26px;
+              height: 26px;
+              cursor: pointer;
+              border-radius: 4px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .decrease,
+            .increase {
+              border: 1px solid #f0f0f0;
+            }
+          }
+
+          .quantity {
+            font-weight: 500;
+          }
+
+          .name,
+          .price {
+            font-size: 16px;
+            font-weight: 500;
+          }
+
+          .price {
+            max-width: 80px;
+          }
+
+          .des-note {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: #2b2b2b;
+
+            .note-container {
+              display: flex;
+              gap: 6px;
+              align-items: start;
+            }
+
+            .icon-note {
+              height: 24px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .note {
+              background-color: #f3f3f3;
+              padding: 4px 8px;
+              width: fit-content;
+              border-radius: 4px;
+              outline: none;
+              line-height: 16px;
+              white-space: pre-wrap;
+              word-break: break-word;
+              outline: none;
+              border: none;
+            }
+
+            .textarea {
+              flex: 1;
+              resize: vertical;
+              height: 60px;
+            }
+          }
+
+          .quantity-step {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-end;
+
+            .step {
+              padding: 4px;
+              color: white;
+              border-radius: 4px;
+              background-color: rgba(250, 114, 40, 0.8);
+            }
+          }
+        }
+      }
+    }
+
+    .empty-text {
+      margin: 10px auto;
+    }
+
+    .order-button {
+      width: 100%;
+      height: 44px;
+      background-color: #ee702d;
+      border-radius: 6px;
+      border: none;
+      color: white;
+      outline: none;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .order-button:disabled {
+      opacity: 0.7;
+    }
+  }
+}
+
+.table-order-modal {
+  .ant-modal-content {
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ant-modal-body {
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  .order-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 16px;
+
+    span {
+      display: inline-block;
+      min-width: 80px;
+      font-weight: 500;
+      text-align: right;
+    }
+  }
+}

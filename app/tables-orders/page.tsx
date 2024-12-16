@@ -1,219 +1,351 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Card, Col, Row } from 'antd';
-// import { initializeSocket, disconnectSocket } from '@/utils/socket';
-import './styles.scss';
-import withAuth from '@/components/WithAuth';
-import { Content } from 'antd/es/layout/layout';
-import { calculateWaitingTime } from '@/utils';
-import { CloseCircleOutlined } from '@ant-design/icons';
-import RemoveOrderModal from '@/components/RemoveOrderModal';
-import { IOrder } from '@/types/order';
-import { ITable } from '@/types/table';
-import { OrderStatus } from '@/constants';
-import { getOrders } from '@/services/order';
-import TableApi from '@/services/tables';
 
-const getSortedOrderDetails = (orderList: IOrder[]) => {
-  return orderList.sort(
-    (a: any, b: any) =>
-      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+import './index.scss';
+import React, { useEffect, useState } from 'react';
+// import { initializeSocket, disconnectSocket } from '@/utils/socket';
+import { IOrder, IOrderDetail } from '@/types/order';
+import WithAuth from '@/components/WithAuth';
+import useSWR, { mutate } from 'swr';
+import TableApi from '@/services/tables';
+import OrderApi from '@/services/orders';
+import { Loading } from '@/components/Loading';
+import { groupBy } from 'lodash';
+import { Button, Modal, notification } from 'antd';
+import { formatCurrency, timeDifferenceFromNow } from '@/utils';
+import { NotepadText } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { IRestaurant } from '@/types/restaurant';
+import useSWRMutation from 'swr/mutation';
+import { ITable } from '@/types/table';
+import ClientApi from '@/services/client';
+import { getImage } from '@/utils';
+import Image from 'next/image';
+import { OrderStatus } from '@/constants';
+// TODO: socket
+
+const formatGroupOrders = (orders: IOrder[]) => {
+  const flatOrderDetails = orders
+    .map((order) =>
+      order.orderDetails.map((orderDetail) => ({
+        ...orderDetail,
+        orderId: order.id,
+        tableId: order.tableId,
+      })),
+    )
+    .flat();
+  const groupedOrders = groupBy(
+    flatOrderDetails,
+    (item) => `${item.orderId}-${item.groupOrderNumber}`,
+  );
+
+  const formattedGroupedOrders: IOrderDetail[][] = [];
+  Object.values(groupedOrders).forEach((group) => {
+    formattedGroupedOrders.push(group);
+  });
+
+  return formattedGroupedOrders.sort(
+    (a, b) =>
+      new Date(b[0].createdAt).getTime() - new Date(a[0].createdAt).getTime(),
   );
 };
 
-const OrderList = () => {
-  const [waitingTimes, setWaitingTimes] = useState<{ [key: number]: string }>(
-    {},
+const TablesOrders = () => {
+  const restaurant = useSelector(
+    (state: RootState) => state.app.restaurant as IRestaurant,
   );
-  // initialOrderList
-  const [orderList, setOrderList] = useState<IOrder[]>([]);
-  const [tableList, setTableList] = useState<ITable[]>([]);
-  const [visible, setVisible] = useState({ removeOrderItem: false });
-  const [focusOrderDetail, setFocusOrderDetail] = useState<any>(undefined);
+  const steps = restaurant.steps;
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [viewTable, setViewTable] = useState<ITable>();
 
-  const dynamicOrderList = useMemo(() => {
-    return getSortedOrderDetails(orderList);
-  }, [orderList]);
-
-  const currenTable = useMemo(() => {
-    return tableList.map((item) => {
-      const order = dynamicOrderList.find((e) => e.tableId === item.id);
-      return { ...item, status: order?.status ?? 'free' };
-    });
-  }, [dynamicOrderList, tableList]);
+  useEffect(() => {}, []);
 
   useEffect(() => {
-    loadTableList();
-    loadOrderList();
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newWaitingTimes: { [key: number]: string } = {};
-      dynamicOrderList.forEach((order) => {
-        newWaitingTimes[order.id] = calculateWaitingTime(
-          String(order.createdAt),
-        );
-      });
-      setWaitingTimes(newWaitingTimes);
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
     }, 60000);
 
-    return () => clearInterval(interval);
-  }, [dynamicOrderList]);
+    return () => clearInterval(intervalId);
+  }, []);
 
-  const loadTableList = async () => {
-    const response = await TableApi.getTables();
-    setTableList(response);
-  };
+  const { data: tables = [], isLoading: isTableLoading } = useSWR(
+    'tables',
+    TableApi.getTables,
+  );
+  const { data: orders = [], isLoading: isOrderLoading } = useSWR(
+    'orders',
+    () => OrderApi.getOrders({ status: 'InProgress' }),
+  );
 
-  const loadOrderList = async () => {
-    const response = await getOrders();
+  const { data: orderInViewTable } = useSWR(
+    viewTable?.id ? ['table-order', viewTable.id] : null,
+    () => ClientApi.getOrderByTable({ tableId: viewTable?.id as number }),
+  );
 
-    if (response?.data?.success) {
-      setOrderList(response.data?.data);
-    }
-  };
+  const { trigger: triggerUpdateOrderDetail } = useSWRMutation(
+    'update-order-detail',
+    async (
+      _: string,
+      {
+        arg,
+      }: {
+        arg: {
+          id: number;
+          step: number;
+        };
+      },
+    ) => OrderApi.updateOrderDetail(arg),
+    {
+      onSuccess: () => {
+        mutate('orders');
+      },
+      onError: (error) => {
+        console.error('Error update order detail:', error);
+        notification.error({
+          message: 'Update order detail failed!',
+        });
+      },
+    },
+  );
 
-  const removeOrderItem = (orderId: number, itemId: number) => {
-    setVisible({ ...visible, removeOrderItem: false });
-    setOrderList((prevOrders) => {
-      const updatedOrders = prevOrders.map((order) => {
-        if (order.id === orderId) {
-          const updatedOrderDetails = order.orderDetails.filter(
-            (item) => item.id !== itemId,
-          );
-
-          if (updatedOrderDetails.length === 0) {
-            return null;
-          }
-
-          return {
-            ...order,
-            orderDetails: updatedOrderDetails,
+  const { trigger: triggerUpdateOrder, isMutating: isUpdatingOrder } =
+    useSWRMutation(
+      'update-order',
+      async (
+        _: string,
+        {
+          arg,
+        }: {
+          arg: {
+            id: number;
+            status: string;
           };
-        }
-        return order;
-      });
+        },
+      ) => OrderApi.updateOrder(arg),
+      {
+        onSuccess: () => {
+          mutate('orders');
+          setViewTable(undefined);
+          notification.success({
+            message: 'Mark order complete successfully!',
+          });
+        },
+        onError: (error) => {
+          console.error('Error update order:', error);
+          notification.error({
+            message: 'Update order detail!',
+          });
+        },
+      },
+    );
 
-      return updatedOrders.filter((order) => order !== null);
+  if (isTableLoading || isOrderLoading) {
+    return <Loading />;
+  }
+
+  const groupOrders = formatGroupOrders(orders);
+
+  const getTableName = (tableId: number) => {
+    const table = tables.find((t) => t.id === tableId);
+    return table ? table.name : '';
+  };
+
+  const getCurrentStep = (index: number) => {
+    const maxStep = Math.max(...steps.map((step) => step.step));
+
+    if (index > maxStep) {
+      return steps.find((step) => step.step === maxStep)?.name;
+    }
+
+    return steps.find((step) => step.step === index)?.name;
+  };
+
+  const handleNextStep = (orderDetail: IOrderDetail) => {
+    triggerUpdateOrderDetail({
+      id: orderDetail.id,
+      step: orderDetail.step + 1,
     });
   };
 
-  const handleConfirmOrder = (order: IOrder) => {
-    // handleConfirmOrder logic
-  };
-
-  const renderTable = (table: ITable) => {
-    return (
-      <Col span={8} key={table.id}>
-        <Col
-          className="table_container"
-          style={{
-            backgroundColor:
-              table.status === OrderStatus.InProgress ? 'orange' : '#04f400',
-          }}
-        >
-          <Row className="table_header" justify={'space-between'}>
-            <Col className="table_name">{table.name}</Col>
-            <Col className="table_status">Trống</Col>
-          </Row>
-          <Row>các món đang chờ</Row>
-        </Col>
-      </Col>
-    );
-  };
-
-  const renderOrder = (order: IOrder) => {
-    const table = tableList.find((item) => item.id === order.tableId);
-    return (
-      <Col className="order_container" key={order.id}>
-        <Row className="order_header" justify={'space-between'}>
-          <Col className="order_name">
-            {table?.name} : {order?.status}{' '}
-          </Col>
-          <Col className="table_status">
-            {waitingTimes[order.id] ||
-              calculateWaitingTime(String(order.createdAt))}
-          </Col>
-        </Row>
-        {order.orderDetails.map((item, index) => (
-          <Row className="order_value" justify={'space-between'} key={index}>
-            <Col className="order_name">
-              <CloseCircleOutlined
-                color="red"
-                className="dish_cancel"
-                onClick={() => {
-                  setFocusOrderDetail({ order: order, orderItem: item });
-                  setVisible({ ...visible, removeOrderItem: true });
-                }}
-              />
-              {item.dishName}
-            </Col>
-            <Col className="order_amount"> Số Lượng : {item.quantity}</Col>
-          </Row>
-        ))}
-        <Row gutter={[12, 12]} justify={'end'}>
-          <Col>
-            <Button onClick={() => handleConfirmOrder(order)} type="primary">
-              Xác nhận
-            </Button>
-          </Col>
-        </Row>
-      </Col>
-    );
-  };
-
-  // setup socket example
-  const [messages, setMessages] = useState<string[]>([]);
-
-  // useEffect(() => {
-  //   const socket = initializeSocket();
-
-  //   socket.on('message', (message: string) => {
-  //     setMessages((prevMessages) => [...prevMessages, message]);
-  //   });
-
-  //   // Cleanup when the component unmounts
-  //   return () => {
-  //     disconnectSocket();
-  //   };
-  // }, []);
-
-  // const sendMessage = () => {
-  //   const socket = getSocket();
-  //   socket.emit('message', 'Hello from Next.js!');
-  // };
-
   return (
-    <div className="order_list_container">
-      <Row className="container_header">Danh sách đơn hàng</Row>
-      <Content className="container_content">
-        <Row justify={'space-around'}>
-          <Col span={16}>
-            <Row className="table_list" gutter={[12, 8]} justify={'start'}>
-              {currenTable.map((item) => renderTable(item))}
-            </Row>
-          </Col>
-          <Col span={8} className="order_list">
-            <Card className="order_card">
-              {dynamicOrderList.map((order) => renderOrder(order))}
-            </Card>
-          </Col>
-        </Row>
-      </Content>
-      <RemoveOrderModal
-        visible={visible.removeOrderItem}
-        onCancel={() => setVisible({ ...visible, removeOrderItem: false })}
-        onSubmit={() =>
-          removeOrderItem(
-            focusOrderDetail?.order?.id,
-            focusOrderDetail?.orderItem?.id,
-          )
+    <>
+      <div className="tables-orders-container">
+        <div className="tables-container">
+          <div className="title">Tables</div>
+          <div className="tables grid">
+            {tables.map((table) => (
+              <div
+                className={`table-card ${orders.find((o) => o.tableId === table.id) ? 'active' : 'empty'}`}
+                key={table.id}
+                onClick={() => {
+                  if (orders.find((o) => o.tableId === table.id)) {
+                    setViewTable(table);
+                  }
+                }}
+              >
+                <div className="name">{table.name}</div>
+                <div className="seats">{table.seats} seats</div>
+                <div className="status">
+                  {orders.find((o) => o.tableId === table.id)
+                    ? 'Being served'
+                    : 'Empty'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="divide" />
+        <div className="orders-container">
+          <div className="title">Processing orders</div>
+          <div className="orders">
+            {groupOrders.map((groupOrder) => (
+              <div
+                className="order-card"
+                key={`${groupOrder[0].tableId}_${groupOrder[0].groupOrderNumber}`}
+              >
+                <div className="header">
+                  <div className="title">
+                    {getTableName(groupOrder[0].tableId as number)}
+                  </div>
+                  <div className="time">
+                    {timeDifferenceFromNow(
+                      groupOrder[0].createdAt,
+                      currentTime,
+                    )}
+                  </div>
+                </div>
+                <div className="body">
+                  {groupOrder.map((orderDetail) => (
+                    <div className="row-container" key={orderDetail.id}>
+                      <div className="row">
+                        <div className="name-quantity">
+                          <div className="name">{orderDetail.dishName}</div>
+                          <div className="quantity">
+                            x{orderDetail.quantity}
+                          </div>
+                        </div>
+                        {orderDetail.step !== 0 ? (
+                          <div className="step">
+                            {getCurrentStep(orderDetail.step)}
+                          </div>
+                        ) : (
+                          <div className="actions">
+                            <Button
+                              size="small"
+                              color="primary"
+                              variant="outlined"
+                              onClick={() => handleNextStep(orderDetail)}
+                            >
+                              Next step
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                      {orderDetail.note && (
+                        <div className="note-container">
+                          <div className="icon-note">
+                            <NotepadText size={16} />
+                          </div>
+                          <p className="note">
+                            {orderDetail.note ?? 'Add note'}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <Modal
+        title={viewTable?.name}
+        open={!!viewTable}
+        onOk={() =>
+          triggerUpdateOrder({
+            id: orderInViewTable?.id as number,
+            status: OrderStatus.Complete,
+          })
         }
-        orderItemDetail={focusOrderDetail}
-      />
-    </div>
+        onCancel={() =>
+          triggerUpdateOrder({
+            id: orderInViewTable?.id as number,
+            status: OrderStatus.Cancel,
+          })
+        }
+        okText="Finish"
+        cancelText="Cancel order"
+        okButtonProps={{ loading: isUpdatingOrder }}
+        cancelButtonProps={{ danger: true, loading: isUpdatingOrder }}
+        className="table-order-modal"
+      >
+        <div className="cart-items">
+          {orderInViewTable?.orderDetails.map((orderDetail) => (
+            <div className="cart-item" key={orderDetail.id}>
+              <Image
+                src={getImage(orderDetail.imageIds[0])}
+                alt="Dish image"
+                width={200}
+                height={200}
+                objectFit="cover"
+              />
+              <div className="info">
+                <div className="row">
+                  <h4 className="name">{orderDetail.dishName}</h4>
+                  <p className="price">
+                    {formatCurrency(orderDetail.dishPrice)}
+                  </p>
+                </div>
+                <div className="row">
+                  <div className="des-note">
+                    <p>{orderDetail.dishDescription}</p>
+                    {orderDetail.note && (
+                      <div className="note-container">
+                        <div className="icon-note">
+                          <NotepadText size={16} />
+                        </div>
+                        <p className="note">{orderDetail.note ?? 'Add note'}</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="quantity-step">
+                    <div className="quantity">{orderDetail.quantity}</div>
+                    <div className="step">
+                      {getCurrentStep(orderDetail.step)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div className="order-summary">
+            <div>
+              Total quantity:
+              <span>
+                {orderInViewTable?.orderDetails.reduce(
+                  (total, orderDetail) => total + orderDetail.quantity,
+                  0,
+                )}
+              </span>
+            </div>
+            <div>
+              Total price:
+              <span>
+                {formatCurrency(
+                  orderInViewTable?.orderDetails.reduce(
+                    (total, orderDetail) =>
+                      total + orderDetail.dishPrice * orderDetail.quantity,
+                    0,
+                  ) ?? 0,
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };
 
-export default withAuth(OrderList);
+export default WithAuth(TablesOrders);

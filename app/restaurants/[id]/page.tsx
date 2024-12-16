@@ -232,8 +232,8 @@ const ClientPage = () => {
               : 'http://localhost:5000/api/v1/files/4151f059-b37e-47db-b833-c3e7e416ca3d'
           }
           alt="Restaurant image"
-          width={100}
-          height={100}
+          width={800}
+          height={400}
         />
         <div className="restaurant-info">
           <h1 className="name">{data.restaurantName}</h1>

@@ -1,5 +1,7 @@
 export interface IOrderDetail {
   id: number;
+  orderId?: number;
+  tableId?: number;
   quantity: number;
   step: number;
   discountPercent: number;
