@@ -1,17 +1,24 @@
 import axios from 'axios';
 
+const url = process.env.NEXT_PUBLIC_API_URL;
+
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:5000/api/v1',
+  baseURL: url,
   headers: {
-    'Content-Type': 'application/json; charset=utf-8',
+    'Content-Type': 'application/json',
   },
-  withCredentials: true,
 });
 
 const setupAxiosInterceptor = () => {
-  axiosClient.interceptors.response.use(
-    (response) => {
-      return response.data;
+  axiosClient.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('accessToken');
+
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      return config;
     },
     (error) => {
       return Promise.reject(error);

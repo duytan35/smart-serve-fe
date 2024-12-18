@@ -1,3 +1,5 @@
+import html2canvas from 'html2canvas';
+
 export const formatDate = (date: any) => {
   const startDateString = date;
   const startDate = new Date(startDateString);
@@ -22,7 +24,6 @@ export const calculateWaitingTime = (createdAt: string): string => {
   const padZero = (num: number) => String(num).padStart(2, '0');
 
   return `${padZero(diffHours)}:${padZero(diffMinutes)}`;
-  // return `${padZero(diffHours)}:${padZero(diffMinutes)}:${padZero(diffSeconds)}`;
 };
 
 export const formatCurrency = (price: number) => {
@@ -36,8 +37,11 @@ export const formatCurrency = (price: number) => {
     : formattedIntegerPart;
 };
 
-export const timeDifferenceFromNow = (inputTime: string) => {
-  const now = new Date();
+export const timeDifferenceFromNow = (
+  inputTime: string,
+  currentTime?: string | Date,
+) => {
+  const now = currentTime ? new Date(currentTime) : new Date();
   const inputDate = new Date(inputTime);
 
   const diffInSeconds = Math.floor(
@@ -45,7 +49,7 @@ export const timeDifferenceFromNow = (inputTime: string) => {
   );
 
   if (diffInSeconds < 60) {
-    return `${diffInSeconds}s ago`;
+    return '0m ago';
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
@@ -63,4 +67,33 @@ export const timeDifferenceFromNow = (inputTime: string) => {
 
   const diffInDays = Math.floor(diffInHours / 24);
   return `${diffInDays}d ago`;
+};
+
+export const getImage = (imageId: string) => {
+  return process.env.NEXT_PUBLIC_API_URL + '/files/' + imageId;
+};
+
+export const generateUrlQRcode = async (
+  id: number,
+  dimensions: { width: number; height: number; scale: number } = {
+    width: 50,
+    height: 50,
+    scale: 4,
+  },
+) => {
+  const targetDiv = document.querySelector(`#qr-code-${id}`) as HTMLElement;
+  if (targetDiv) {
+    targetDiv.style.width = `${dimensions.width}px`;
+    targetDiv.style.height = `${dimensions.height}px`;
+
+    const canvas = await html2canvas(targetDiv, {
+      width: dimensions.width,
+      height: dimensions.height,
+      scale: dimensions.scale,
+    });
+    const pngUrl = canvas.toDataURL('image/png');
+    return pngUrl;
+  }
+
+  return null;
 };

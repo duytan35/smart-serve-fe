@@ -1,13 +1,9 @@
-export interface ITableResponse {
-  createdAt: string;
+export interface ITable {
   id: number;
   name: string;
-  restaurantId: string; // UUID string
+  restaurantId: string;
   seats: number;
+  status?: string;
+  createdAt: string;
   updatedAt: string;
-}
-
-export interface ITablApiResponse {
-  success: boolean;
-  data: ITableResponse[];
 }

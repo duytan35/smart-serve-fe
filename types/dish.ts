@@ -24,3 +24,12 @@ export interface IDishInCart {
   quantity: number;
   note?: string;
 }
+
+export interface ICreateDish {
+  dishGroupId: number;
+  description?: string;
+  imageIds: string[];
+  name: string;
+  price: number;
+  status?: number;
+}

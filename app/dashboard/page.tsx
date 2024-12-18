@@ -1,7 +1,8 @@
 'use client';
-import { Table } from 'antd';
+
 import './index.scss';
-import withAuth from '@/components/withAuth';
+import { Table } from 'antd';
+import WithAuth from '@/components/WithAuth';
 
 const dataSource = [
   {
@@ -38,11 +39,11 @@ const columns = [
 
 const DashboardPage = () => {
   return (
-    <div className='dashboard_container'>
+    <div className="dashboard_container">
       This is dashboard page
       <Table dataSource={dataSource} columns={columns} />;
     </div>
   );
 };
 
-export default withAuth(DashboardPage);
+export default WithAuth(DashboardPage);
