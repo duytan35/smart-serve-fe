@@ -58,6 +58,7 @@ const DishModal = ({
         notification.success({
           message: 'Create dish successfully!',
         });
+        setFileList([]);
         mutate('dish-groups');
         form.resetFields();
         onCancel();
@@ -86,6 +87,7 @@ const DishModal = ({
         notification.success({
           message: 'Update dish successfully!',
         });
+        setFileList([]);
         mutate('dish-groups');
         form.resetFields();
         onCancel();
@@ -173,6 +175,7 @@ const DishModal = ({
       }
       open={visible}
       onCancel={() => {
+        setFileList([]);
         form.resetFields();
         onCancel();
       }}

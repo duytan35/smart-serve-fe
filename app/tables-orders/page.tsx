@@ -2,7 +2,6 @@
 
 import './index.scss';
 import React, { useEffect, useState } from 'react';
-// import { initializeSocket, disconnectSocket } from '@/utils/socket';
 import { IOrder, IOrderDetail } from '@/types/order';
 import WithAuth from '@/components/WithAuth';
 import useSWR, { mutate } from 'swr';
@@ -22,7 +21,6 @@ import ClientApi from '@/services/client';
 import { getImage } from '@/utils';
 import Image from 'next/image';
 import { OrderStatus } from '@/constants';
-// TODO: socket
 
 const formatGroupOrders = (orders: IOrder[]) => {
   const flatOrderDetails = orders
@@ -58,8 +56,6 @@ const TablesOrders = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [viewTable, setViewTable] = useState<ITable>();
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
@@ -74,7 +70,7 @@ const TablesOrders = () => {
   );
   const { data: orders = [], isLoading: isOrderLoading } = useSWR(
     'orders',
-    () => OrderApi.getOrders({ status: 'InProgress' }),
+    () => OrderApi.getOrders({ status: OrderStatus.InProgress }),
   );
 
   const { data: orderInViewTable } = useSWR(
@@ -246,9 +242,7 @@ const TablesOrders = () => {
                           <div className="icon-note">
                             <NotepadText size={16} />
                           </div>
-                          <p className="note">
-                            {orderDetail.note ?? 'Add note'}
-                          </p>
+                          <p className="note">{orderDetail.note}</p>
                         </div>
                       )}
                     </div>

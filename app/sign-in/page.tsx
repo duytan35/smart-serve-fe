@@ -37,7 +37,7 @@ const SignInPage = () => {
         localStorage.setItem('accessToken', accessToken);
         dispatch(setRestaurant(restaurant));
 
-        router.push('/home');
+        router.push('/tables-orders');
       },
       onError: () => {
         notification.error({

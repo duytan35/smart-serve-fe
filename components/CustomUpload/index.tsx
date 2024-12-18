@@ -16,9 +16,14 @@ const beforeUpload = (file: File) => {
 interface CustomUploadProps {
   fileList: CustomUploadFile[];
   setFileList: React.Dispatch<React.SetStateAction<CustomUploadFile[]>>;
+  maxCount?: number;
 }
 
-const CustomUpload = ({ fileList, setFileList }: CustomUploadProps) => {
+const CustomUpload = ({
+  fileList,
+  setFileList,
+  maxCount,
+}: CustomUploadProps) => {
   const [isUploading, setIsUploading] = useState(false);
 
   const handleUploadChange: UploadProps['onChange'] = async (info) => {
@@ -35,20 +40,27 @@ const CustomUpload = ({ fileList, setFileList }: CustomUploadProps) => {
       const imageId = fileResponse?.id;
       const imageUrl = getImage(imageId);
 
-      setFileList((prevList) => [
-        ...prevList,
-        {
+      setFileList((prevList) => {
+        const updatedList = [...prevList];
+        if (maxCount && updatedList.length >= maxCount) {
+          updatedList.shift();
+        }
+
+        updatedList.push({
           uid: file.uid,
           name: file.name,
           status: 'done',
           url: imageUrl,
           imageId: imageId,
-        } as CustomUploadFile,
-      ]);
+        } as CustomUploadFile);
+        return updatedList;
+      });
+
       setIsUploading(false);
     } catch (error) {
       console.error('Error uploading image:', error);
       message.error('Image upload failed.');
+      setIsUploading(false);
     }
   };
 

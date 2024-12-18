@@ -6,6 +6,9 @@
   border: 1px solid transparent;
   font-weight: 500;
   height: fit-content;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
 }
 
 .filter-card.selected {

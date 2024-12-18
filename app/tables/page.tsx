@@ -44,70 +44,69 @@ const Tables = () => {
 
   const { data: tables = [], isLoading } = useSWR('tables', TableApi.getTables);
 
-  const { trigger: triggerCreateTable, isMutating: isCreating } =
-    useSWRMutation(
-      'create-table',
-      async (
-        _: string,
-        {
-          arg,
-        }: {
-          arg: {
-            name: string;
-            seats?: number;
-          };
-        },
-      ) => TableApi.createTable(arg),
+  const { trigger: triggerCreateTable } = useSWRMutation(
+    'create-table',
+    async (
+      _: string,
       {
-        onSuccess: () => {
-          notification.success({
-            message: 'Create table successfully!',
-          });
-          mutate('tables');
-          setIsModalVisible(false);
-        },
-        onError: (error) => {
-          console.error('Error create table:', error);
-          notification.error({
-            message: 'Create table failed!',
-          });
-        },
+        arg,
+      }: {
+        arg: {
+          name: string;
+          seats?: number;
+        };
       },
-    );
+    ) => TableApi.createTable(arg),
+    {
+      onSuccess: () => {
+        notification.success({
+          message: 'Create table successfully!',
+        });
+        mutate('tables');
+        form.resetFields();
+        setIsModalVisible(false);
+      },
+      onError: (error) => {
+        console.error('Error create table:', error);
+        notification.error({
+          message: 'Create table failed!',
+        });
+      },
+    },
+  );
 
-  const { trigger: triggerUpdateTable, isMutating: isUpdating } =
-    useSWRMutation(
-      'update-table',
-      async (
-        _: string,
-        {
-          arg,
-        }: {
-          arg: {
-            id: number;
-            name: string;
-            seats?: number;
-          };
-        },
-      ) => TableApi.updateTable(arg),
+  const { trigger: triggerUpdateTable } = useSWRMutation(
+    'update-table',
+    async (
+      _: string,
       {
-        onSuccess: () => {
-          notification.success({
-            message: 'Update table successfully!',
-          });
-          mutate('tables');
-          setIsModalVisible(false);
-          setEditingTable(undefined);
-          form.resetFields();
-        },
-        onError: (error) => {
-          console.error('Error update table:', error);
-          notification.error({
-            message: 'Update table failed!',
-          });
-        },
+        arg,
+      }: {
+        arg: {
+          id: number;
+          name: string;
+          seats?: number;
+        };
       },
-    );
+    ) => TableApi.updateTable(arg),
+    {
+      onSuccess: () => {
+        notification.success({
+          message: 'Update table successfully!',
+        });
+        mutate('tables');
+        setIsModalVisible(false);
+        setEditingTable(undefined);
+        form.resetFields();
+      },
+      onError: (error) => {
+        console.error('Error update table:', error);
+        notification.error({
+          message: 'Update table failed!',
+        });
+      },
+    },
+  );
 
   const { trigger: triggerRemoveTable, isMutating: isRemoving } =
     useSWRMutation(
